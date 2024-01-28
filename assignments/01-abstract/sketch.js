@@ -9,9 +9,7 @@ function setup() {
   createCanvas(700, 700);
   colorMode(HSB);
   
-  // background triangles grouped by colors
-
-
+  // background triangles (theres a lot sorry)
   back1 = new Triangle(105, 300, 355, 100, 605, 300);
   back2 = new Triangle(105, 300, 355, 500, 605, 300);
 
