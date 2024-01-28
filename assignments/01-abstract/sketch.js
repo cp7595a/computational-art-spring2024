@@ -108,7 +108,7 @@ class Triangle {
     
   }
   update() {
-    
+    // the mouse moving to the left reduces saturation
     let saturation = mouseX / width * 100;
     
     fill(0, saturation, 25);
