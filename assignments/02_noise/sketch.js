@@ -1,4 +1,5 @@
-let yoff = 0;
+// set variables
+let yoff = 0; 
 let height1 = 0;
 
 function setup() {
@@ -7,23 +8,25 @@ function setup() {
 }
 yoff += 0;
 
+// I used the noise() p5 reference as inpiration to make this blood drip thing
+
+User
 function draw() {
   background(255); // Redrawing the background helps for the drip effect
 
-  let noise1 = map(mouseY, 0, height, 0.005, 0.005); // Adjusting the noise mapping based on mouseY
+  let noise1 = map(mouseY, 0, height, 0.005, 0.005); 
 
-  yoff += 0.0008;
+  //yoff += 0.0009; // slow change overtime
 
-  // Draw the dripping lines.
-  for (let x = 0; x <= width; x += 0.3) {
-    height1 += 0.001
-    let y = map(noise(x * noise1, yoff), 0, 1, 0, height1); // Use maxHeight as the upper limit
+  for (let i = 0; i <= width; i += 0.3) { // same structure as in class except incremented by 0.3 bc i++ felt too slow
+    height1 += 0.001 // increment for the drip but not too fast
+    let y = map(noise(i * noise1), 0, 1, 0, height1);
     stroke(16, 95, 54);
-    strokeWeight(10);
-    line(x, 0, x, y);
-  
+    strokeWeight(5);
+    line(i, 0, i, y); 
   }
 
+  // looked for text on the p5 reference page so that this project looked less crazy
   textSize(32);
   noStroke();
   fill(255);
