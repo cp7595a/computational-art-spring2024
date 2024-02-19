@@ -14,7 +14,7 @@ User
 function draw() {
   background(255); // Redrawing the background helps for the drip effect
 
-  let noise1 = map(mouseY, 0, height, 0.005, 0.005); 
+  let noise1 = map(mouseY, 0, height, 0.005, 0.005); // if u want to move it around?
 
   //yoff += 0.0009; // slow change overtime
 
