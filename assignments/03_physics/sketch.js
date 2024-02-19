@@ -1,17 +1,20 @@
 let dots = [];
 let numDots = 10;
 let snow = [];
-let snowAmt = 500;
+let snowAmt = 250;
 
 let gravitationalConstant = 0.00001;
 let downwardGravity;
 let wind;
 
+// images
 function preload(){
   img1 =loadImage("images/pingu.png")
   img2 =loadImage("images/cake.png")
   img3 =loadImage("images/igloo.gif")
   img4 =loadImage("images/hat.png")
+  img5 = loadImage("images/star.png")
+
 }
 function setup() { 
     createCanvas(600, 400);
@@ -21,21 +24,21 @@ function setup() {
     downwardGravity = createVector(0, 0.38);
     wind = createVector(-0.01, 0);
   
-  // Create all the snow
+  // Create the snow
   for (let i = 0; i < snowAmt; i++) {
     let x = map(random(i), 0, snowAmt, 0, 800);
     let y = random(15);
     snow.push(new Snow(x, y, i + 1));
   }
 
+  // create the singular sun
   sun = new Sun(width / 2, height / 2, 25);
 } 
 
 function draw() { 
     push();
          noStroke();
-         let darkness = map(sun.pos.y, height, 0, 0, 100);
-         fill(197, 43, darkness);
+         fill(197, 43, 100);
          rect(0, 0, width, height);
     pop();
 
@@ -53,9 +56,8 @@ function draw() {
     sun.update();
     sun.show();
 
-
+    // non class stuff
     
-
     push();
     noStroke();
     fill(90);
@@ -69,6 +71,7 @@ function draw() {
     image(img2, 125 , 40, 85, 85);
     image(img3, -225 , -20, 225, 175);
     image(img4, 60 , -10, 35, 35);
+    image(img5, 60 , -100, 35, 35);
     pop();
 
 

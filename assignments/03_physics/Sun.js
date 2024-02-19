@@ -5,19 +5,17 @@ class Sun {
     this.radiusVariation = 50; // how much variation is in the shape
     this.angleWidth = ang; // making a size variable for my for 
     // loop down there (I originally had 2 PI calc here but this way was cuter so I left it)
+
   }
-
-  // Other methods...
-
   update() {
     this.xoff += 0.01; // updating it and incrementing it
-    this.pos.y += 0.1; // gravity
+    this.pos.y += 0.01; // gravity
   }
 
   show() {
     noStroke();
-    fill(48, 77, 88);
-    
+    fill(48, 77, 88, this.brightness); // Set background color with brightness
+
     beginShape();
     for (let i = 0; i < this.angleWidth; i++) {
       let angle = this.angleWidth * i / TWO_PI; // calculating the angle for a circle although 
