@@ -49,9 +49,8 @@ class dotEx {
         if (this.position.y > height) {
             this.addWaterDrag();
         }
-
-        // this.accelarationConst += 0.01
         
+        this.accelarationConst += 0.005;
 
         this.position.x += this.vel.x;
         this.position.y += this.vel.y;
