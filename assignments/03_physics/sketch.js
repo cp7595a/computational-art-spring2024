@@ -16,10 +16,10 @@ function preload(){
 function setup() { 
     createCanvas(600, 400);
     colorMode(HSB);
-    background(360 * .6, 60, 100, 0.03);
+    background(100);
     
     downwardGravity = createVector(0, 0.38);
-    wind = createVector(-1, 0);
+    wind = createVector(-0.01, 0);
   
   // Create all the snow
   for (let i = 0; i < snowAmt; i++) {
@@ -34,7 +34,8 @@ function setup() {
 function draw() { 
     push();
          noStroke();
-         fill(360 * .6, 60, 100);
+         let darkness = map(sun.pos.y, height, 0, 0, 100);
+         fill(197, 43, darkness);
          rect(0, 0, width, height);
     pop();
 

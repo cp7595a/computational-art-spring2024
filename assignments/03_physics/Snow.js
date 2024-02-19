@@ -8,17 +8,14 @@ class Snow {
 
         this.index = index;
 
-
-        // Index is the address in the dots array, let's use it for mass for no
-        // important reason.
         this.mass = this.index;
 
-        // Make the radius have something to do with the mass.
         this.radius = sqrt(this.mass) * 0.5;
     }
 
     wrap() {
-        if (this.pos.y > height) { // set this up so when the snow pixels "die" they'll come back like the wrap function
+        if (this.pos.y > height) { // set this up so when the snow pixels "die" 
+            // they'll come back like the wrap function
             this.pos.x = random(0, 600);
             this.pos.y = random(0, 5);
             this.vel.y = 0;
@@ -31,7 +28,7 @@ class Snow {
         this.acc.add(forceWithMass);
     }
 
-    addWaterDrag() {
+    addWaterDrag() { //Air drag for snow as they get closer to the ground in this case
         // fDrag = -C * mag(velocity)^2
         let dragConstant = -0.3;
         let forceDrag = this.vel.mag() * this.vel.mag() * dragConstant;
@@ -43,7 +40,7 @@ class Snow {
     update() {
         // FORCES
         this.addForce(downwardGravity);
-        // this.addForce(wind);
+        this.addForce(wind);
 
         // Apply water drag if the dot is overlapping with the water area.
         if (this.pos.y > height) {
