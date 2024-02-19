@@ -43,9 +43,10 @@ class Snow {
     update() {
         // FORCES
         this.addForce(downwardGravity);
+        // this.addForce(wind);
 
         // Apply water drag if the dot is overlapping with the water area.
-        if (this.pos.y > height / 2) {
+        if (this.pos.y > height) {
             this.addWaterDrag();
         }
 
@@ -54,12 +55,9 @@ class Snow {
         this.vel.limit(1); // This limits the magnitude of the velocity vector
         this.pos.add(this.vel); // Apply velocity to position
 
-        // Keep the dot on the screen by "wrapping" the position
+        
         this.wrap();
-        // Reset the acceleration back to (0,0). This is important because
-        // forces need to be continually applied in order to affect velocity.
-        // In other words, if we didn't do this, forces would accumulate over
-        // multiple calls vto update(), which isn't what we want.
+
         this.acc.mult(0); 
     }
 

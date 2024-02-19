@@ -44,7 +44,7 @@ class dotEx {
     }
 
     update() {
-        this.addForce(wind);
+        // this.addForce(wind);
 
         if (this.position.y > height) {
             this.addWaterDrag();
