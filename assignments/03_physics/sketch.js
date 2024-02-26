@@ -30,7 +30,7 @@ function setup() {
     let y = random(15);
     snow.push(new Snow(x, y, i + 1));
   }
-
+  
   // create the singular sun
   sun = new Sun(width / 2, height / 2, 25);
 } 

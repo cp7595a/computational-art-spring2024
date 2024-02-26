@@ -8,7 +8,7 @@ class Sun {
 
   }
   update() {
-    this.xoff += 0.01; // updating it and incrementing it
+    this.xoff += 0.01; // updating it and incrementing it for movement
     this.pos.y += 0.01; // gravity
   }
 
@@ -21,7 +21,8 @@ class Sun {
       let angle = this.angleWidth * i / TWO_PI; // calculating the angle for a circle although 
       // the formula has the side length * 360 this worked better bc of individual points (happy accident)
 
-      let noiseVal = noise(cos(angle) + this.xoff, sin(angle) + this.xoff); // I looked up what 
+      let noiseVal = noise(cos(angle) + this.xoff, sin(angle) + this.xoff); // I looked up for the usage of
+      // sin and cos and then incremented by this.xoff
 
       let r = noiseVal * this.radiusVariation + this.angleWidth; // adding noise to the radius val
       let x = this.pos.x + r * cos(angle); // using formula online to calc x
