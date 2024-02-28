@@ -13,7 +13,7 @@ class ParticleSystem {
     }
 
     update() {
-        // Move upward until boomHeight, and then activate the particle instantiation
+        // Move upward until watercan height, and then activate the particle instantiation
         if (this.pos.y < this.waterCanHeight) {
             this.active = true;
         } else {
