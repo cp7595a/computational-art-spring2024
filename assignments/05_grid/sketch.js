@@ -39,7 +39,7 @@ function drawGrid() {
       let xNormal = cellWidth / 2;
       let yNormal = cellHeight / 2;
       
-      let flowerSize = map(noise(x * 0.01 + xOff, y * 0.01 + yOff, frameCount * 0.05), 0, 1, 5, 120); // Inverted mapping for flower size
+      let flowerSize = map(noise(x * 0.01 + xOff, y * 0.01 + yOff, frameCount * 0.05), 0, 1, 5, 120);
       let flowerHue = (noise(x * 0.01 + xOff, y * 0.01 + yOff) * 1.5) * 360;// Using 2D Perlin noise for hue
 
       strokeWeight(0.4); 
