@@ -135,7 +135,6 @@ function draw() {
 
   stroke(29, 29, 68);
   strokeWeight(5);
-
   point(50, 380);
   point(350, 350);
   point(200, 350);
