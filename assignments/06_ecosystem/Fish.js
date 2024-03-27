@@ -5,23 +5,23 @@ class Fish {
         this.vel = createVector(1, 0);
         this.acc = createVector(0, 0);
 
-        this.target = target;
+        this.target = target; // crab target >:(
         
-        this.active = false;
-        this.maxSpeed = 2;
-        this.maxForceAttack = 0.007;
+        this.active = false; // setting up activation for the flee v fight down below
+
+        // speeds and forces
+        this.maxSpeed = 1.2;
+        this.maxForceFlee = 0.007;
+        this.maxForceAttack = 0.01;
         this.maxCohesionForce = 0.001;
         this.maxAlignmentForce = 0.001;
 
         this.dim = random(10, 30);
         this.angle = 0;
 
-        this.hue = 22;
-        this.saturation = 70;
-        this.brightness = 125;
+        this.hue = 15 + this.dim/1.75;
 
         this.mass = 1;
-
 
         this.range = 125;
     }
@@ -31,6 +31,7 @@ class Fish {
         this.acc.add(forceWithMass);
     }
 
+    // for the little fish
     flee(t) {
         for (let fish of fishes) {
             if (fish !== this) {
@@ -38,7 +39,7 @@ class Fish {
                 if (desired.mag() < 100) {
                     desired.setMag(this.maxSpeed);
                     let force = p5.Vector.sub(desired, this.vel);
-                    force.limit(this.maxForce);
+                    force.limit(this.maxForceFlee);
                     force.mult(-1);
                     this.addForce(force);
                 }
@@ -51,13 +52,6 @@ class Fish {
         this.pos.y = (this.pos.y + height) % height;
     }
 
-    flow() {
-        let arrayIndeces = positionToFlowFieldIndex(this.pos.x, this.pos.y);
-        let angle = flowField[arrayIndeces.x][arrayIndeces.y].angle;
-        let force = p5.Vector.fromAngle(angle);
-        force.limit(this.maxForce);
-        this.addForce(force);
-    }
 
     getCloseFishes() {
         let closeFishes = [];
@@ -70,6 +64,8 @@ class Fish {
         }
         return closeFishes;
     }
+
+    //COHESE
 
     cohesion(closeFishes) {
         this.maxSpeed = map(this.dim, 10, 30, 2.1, 0.1);
@@ -93,6 +89,7 @@ class Fish {
     }
 
 
+    //ALINE
     alignment(closeFishes) {
         let sumOfVelocities = createVector(0, 0);
         for (let fish of closeFishes) {
@@ -103,13 +100,13 @@ class Fish {
         }
         sumOfVelocities.setMag(this.maxSpeed);
 
-        // compute steering force
         let steeringForce = p5.Vector.sub(sumOfVelocities, this.vel);
         steeringForce.limit(this.maxAlignmentForce);
 
         return steeringForce;
     }
 
+    // FIGHT
     attack(t) {
         let desired = p5.Vector.sub(t, this.pos);
         if (desired.mag() < 100) {
@@ -120,8 +117,6 @@ class Fish {
             force.limit(this.maxForceAttack);
 
             this.addForce(force);
-
-            new ParticleSystem(0, 0, createVector(0, -0.05));
         }
     }
 
@@ -130,7 +125,7 @@ class Fish {
 
         this.attack(this.target);
 
-        if (!this.active && this.dim < 15) { // Check if not attacking
+        if (this.dim <= 15) { // RUN LITTLE FISH!! GO CRAZY!!
             this.flee(this.target);
         }
 
@@ -145,21 +140,20 @@ class Fish {
         alignmentForce.mult(n);
         this.addForce(alignmentForce);
 
-        // this.flow();
 
 
         this.wrap();
 
 
-        // MOVEMENT
-        this.vel.add(this.acc); // Apply acceleration (and thus the forces) to vel
+        // movement and physics and stuff
+        this.vel.add(this.acc);
         this.vel.limit(this.maxSpeed);
-        this.pos.add(this.vel); // Apply velocity to position
+        this.pos.add(this.vel);
 
         this.acc.set(0, 0);
 
 
-        if (!this.active && this.dim >= 20) { // needed to create a reset because it wasn't ever going back to normal
+        if (!this.active) { // needed to create a reset because it wasn't ever going back to normal
             this.active = false;
         }
     }

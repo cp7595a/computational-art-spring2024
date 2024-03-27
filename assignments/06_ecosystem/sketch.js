@@ -31,7 +31,7 @@ function setup() {
     }
   }
   
-  puffer = new Crab(random(0, 400),random(450, 500))
+  puffer = new Crab(1100, 425)
 
   target = puffer.pos
 
@@ -50,6 +50,7 @@ function setup() {
 function draw() {
   background(0, 0, 100);
 
+  //OCEAN
   fill(0);
   rect(0, 500, width/2, height/6);
 
@@ -59,6 +60,7 @@ function draw() {
 
   pop();
 
+  //Little shiny glimmers
   for (let xIndex = 0; xIndex < numCellsWidth; xIndex++) {
     for (let yIndex = 0; yIndex < numCellsHeight; yIndex++) {
       flowField[xIndex][yIndex].update();
@@ -66,6 +68,7 @@ function draw() {
     }
   }
 
+  //SAN
 
   fill(197, 72, 70, 0.9);
   rect(0, 500, width, height/6);
@@ -84,9 +87,6 @@ function draw() {
   for (let ps of systems) {
     ps.update();
   }
-
-  // fill(120, 100, 100)
-  // rect(10, 400, 5, 20)
   
 }
 
