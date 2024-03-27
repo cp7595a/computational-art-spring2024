@@ -25,15 +25,11 @@ class Cell {
 
         this.offsetX -= random(-0.05, 0.05)
 
-        console.log(this.offsetX)
-
         if (this.scaleOffset > 2){
             this.scaleOffset = 1
         }
 
         this.lifetime += 0.5
-
-        console.log(this.lifetime)
     }
     
     show() {

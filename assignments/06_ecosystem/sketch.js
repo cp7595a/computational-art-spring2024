@@ -1,20 +1,18 @@
 let systems = [];
-let sharks = [];
+let puffers = [];
 let flowField = [];
-let vehicles = [];
+let fishes = [];
 
-let numVehicles = 15;
+let numFishes = 15;
 let numSystems = 10; 
 let numCellsWidth = 20;
 let numCellsHeight = 20;
-// let numSharks = 1;
+let numPuffers = 1;
 
 
 let cellWidth;
 let cellHeight;
-let target;
 let gravity;
-let destroy;
 
 function setup() {
   createCanvas(1200, 600);
@@ -22,48 +20,38 @@ function setup() {
   colorMode(HSB);
   noStroke();
 
-  let destroy = false;
-
   cellWidth = width / numCellsWidth;
   cellHeight = height / numCellsHeight;
 
-  let xoff = 0;
-  let yoff = 0;
-  let inc = 0.2;
   for (let xIndex = 0; xIndex < numCellsWidth; xIndex++) {
     flowField[xIndex] = [];
-    yoff = 0;
     for (let yIndex = 0; yIndex < numCellsHeight; yIndex++) {
-      let angle = map(noise(xoff, yoff), 0, 1, 0, 2 * PI);
+      let angle = 4 * PI;
       flowField[xIndex][yIndex] = new Cell(angle, xIndex, yIndex);
-      yoff += inc;
     }
-    xoff += inc;
   }
   
+  puffer = new Crab(random(0, 400),random(450, 500))
 
-  
-  target = createVector(width/4, height/2);
-  for(let i = 0; i < numVehicles; i++) {
-    vehicles.push(new Fish(random(width), random(height), target));
+  target = puffer.pos
+
+  for(let i = 0; i < numFishes; i++) {
+    fishes.push(new Fish(random(width), random(height), target));
   }
+
 
   gravity  = createVector(0, -0.1)
   for (let i = 0; i < numSystems; i++) {
     systems.push(new ParticleSystem(random(100, width-200), 600, gravity));
   }
-  
 
-  // gravity2  = createVector(0, 0.1)
-  // for (let i = 0; i < numSystems; i++) {
-  //   systems.push(new ParticleSystem(random(100, width-200), 600, gravity2));
-  // }
 }
 
 function draw() {
   background(0, 0, 100);
 
-
+  fill(0);
+  rect(0, 500, width/2, height/6);
 
   push();
   fill(191, 77, 81, 0.8);
@@ -78,22 +66,34 @@ function draw() {
     }
   }
 
+
   fill(197, 72, 70, 0.9);
   rect(0, 500, width, height/6);
   fill(34, 35, 91, 0.9);
   rect(0, 450, width, 500);
 
+  puffer.update();
+  puffer.show();
 
-
-
-  for (let vehicle of vehicles) {
-    vehicle.update();
-    vehicle.show();
+  for (let fish of fishes) {
+    fish.update();
+    fish.show();
   }
+
 
   for (let ps of systems) {
     ps.update();
   }
 
+  // fill(120, 100, 100)
+  // rect(10, 400, 5, 20)
+  
 }
 
+function positionToFlowFieldIndex(x, y) {
+  let xIndex = floor(map(x, 0, width, 0, numCellsWidth));
+  xIndex = constrain(xIndex, 0, numCellsWidth-1);
+  let yIndex = floor(map(y, 0, height, 0, numCellsHeight));
+  yIndex = constrain(yIndex, 0, numCellsHeight-1);
+  return createVector(xIndex, yIndex);
+}

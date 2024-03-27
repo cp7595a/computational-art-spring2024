@@ -6,18 +6,24 @@ class Fish {
         this.acc = createVector(0, 0);
 
         this.target = target;
+        
+        this.active = false;
         this.maxSpeed = 2;
-        this.maxForce = 0.05;
+        this.maxForceAttack = 0.007;
+        this.maxCohesionForce = 0.001;
+        this.maxAlignmentForce = 0.001;
 
-        this.dim = random(10, 25);
+        this.dim = random(10, 30);
+        this.angle = 0;
 
-        this.hue = 180;
+        this.hue = 22;
         this.saturation = 70;
-        this.brightness = 100;
+        this.brightness = 125;
 
-        this.mass = this.dim + random(80, 100);
+        this.mass = 1;
 
-        this.range = 100;
+
+        this.range = 125;
     }
 
     addForce(force) {
@@ -26,17 +32,17 @@ class Fish {
     }
 
     flee(t) {
-        let desired = p5.Vector.sub(t, this.pos);
-
-        if (desired.mag() < 100) {
-
-            desired.setMag(this.maxSpeed);
-
-            let force = p5.Vector.sub(desired, this.vel);
-            force.limit(this.maxForce);
-            force.mult(-1);
-
-            this.addForce(force);
+        for (let fish of fishes) {
+            if (fish !== this) {
+                let desired = p5.Vector.sub(t, this.pos);
+                if (desired.mag() < 100) {
+                    desired.setMag(this.maxSpeed);
+                    let force = p5.Vector.sub(desired, this.vel);
+                    force.limit(this.maxForce);
+                    force.mult(-1);
+                    this.addForce(force);
+                }
+            }
         }
     }
 
@@ -45,69 +51,102 @@ class Fish {
         this.pos.y = (this.pos.y + height) % height;
     }
 
-    getCloseVehicles() {
-        let closeVehicles = [];
-        for (let vehicle of vehicles) {
-            if (vehicle !== this) {
-                if (dist(vehicle.pos.x, vehicle.pos.y, this.pos.x, this.pos.y) < this.range) {
-                    closeVehicles.push(vehicle);
+    flow() {
+        let arrayIndeces = positionToFlowFieldIndex(this.pos.x, this.pos.y);
+        let angle = flowField[arrayIndeces.x][arrayIndeces.y].angle;
+        let force = p5.Vector.fromAngle(angle);
+        force.limit(this.maxForce);
+        this.addForce(force);
+    }
+
+    getCloseFishes() {
+        let closeFishes = [];
+        for (let fish of fishes) {
+            if (fish !== this) {
+                if (dist(fish.pos.x, fish.pos.y, this.pos.x, this.pos.y) < this.range) {
+                    closeFishes.push(fish);
                 }
             }
         }
-        return closeVehicles;
+        return closeFishes;
     }
 
-    cohesion(closeVehicles) {
-        if (closeVehicles.length > 0) {
+    cohesion(closeFishes) {
+        this.maxSpeed = map(this.dim, 10, 30, 2.1, 0.1);
+
+        if (!this.active && closeFishes.length > 0) { // Check if not attacking
             let sumPositions = createVector(0, 0);
-            for (let vehicle of closeVehicles) {
-                sumPositions.add(vehicle.pos);
+            for (let fish of closeFishes) {
+                sumPositions.add(fish.pos);
             }
-            sumPositions.div(closeVehicles.length);
+            sumPositions.div(closeFishes.length);
 
             let desired = p5.Vector.sub(sumPositions, this.pos);
             desired.setMag(this.maxSpeed);
             let steeringForce = p5.Vector.sub(desired, this.vel);
-            steeringForce.limit(this.maxForce);
+            steeringForce.limit(this.maxCohesionForce);
             return steeringForce;
-            
+
         }
 
-        return createVector(0,0);
+        return createVector(0, 0);
     }
 
 
-    alignment(closeVehicles) {
+    alignment(closeFishes) {
         let sumOfVelocities = createVector(0, 0);
-        for (let vehicle of closeVehicles) {
-            sumOfVelocities.add(vehicle.vel);
+        for (let fish of closeFishes) {
+            sumOfVelocities.add(fish.vel);
         }
-        if (closeVehicles.length > 0) {
-            sumOfVelocities.div(closeVehicles.length);
+        if (closeFishes.length > 0) {
+            sumOfVelocities.div(closeFishes.length);
         }
         sumOfVelocities.setMag(this.maxSpeed);
-        
+
         // compute steering force
         let steeringForce = p5.Vector.sub(sumOfVelocities, this.vel);
-        steeringForce.limit(this.maxForce);
+        steeringForce.limit(this.maxAlignmentForce);
 
         return steeringForce;
     }
 
+    attack(t) {
+        let desired = p5.Vector.sub(t, this.pos);
+        if (desired.mag() < 100) {
+            this.active = true;
+            desired.setMag(this.maxSpeed);
 
+            let force = p5.Vector.sub(desired, this.vel);
+            force.limit(this.maxForceAttack);
+
+            this.addForce(force);
+
+            new ParticleSystem(0, 0, createVector(0, -0.05));
+        }
+    }
 
     update() {
-        let closeVehicles = this.getCloseVehicles();
-        // What actions is this agent pursuing?
-        let cohesionForce = this.cohesion(closeVehicles);
+        let closeFishes = this.getCloseFishes();
+
+        this.attack(this.target);
+
+        if (!this.active && this.dim < 15) { // Check if not attacking
+            this.flee(this.target);
+        }
+
+
+        let cohesionForce = this.cohesion(closeFishes);
         cohesionForce.mult(1);
         this.addForce(cohesionForce);
 
 
-        let alignmentForce = this.alignment(closeVehicles);
+        let alignmentForce = this.alignment(closeFishes);
         let n = noise(frameCount * 0.1);
         alignmentForce.mult(n);
         this.addForce(alignmentForce);
+
+        // this.flow();
+
 
         this.wrap();
 
@@ -117,7 +156,12 @@ class Fish {
         this.vel.limit(this.maxSpeed);
         this.pos.add(this.vel); // Apply velocity to position
 
-        this.acc.set(0,0);
+        this.acc.set(0, 0);
+
+
+        if (!this.active && this.dim >= 20) { // needed to create a reset because it wasn't ever going back to normal
+            this.active = false;
+        }
     }
 
     show() {
@@ -125,11 +169,11 @@ class Fish {
 
         translate(this.pos.x, this.pos.y);
 
-        let angle = this.vel.heading();
-        rotate(angle);
+        let angle2 = this.vel.heading();
+        rotate(angle2);
 
         beginShape();
-        fill(22, 89, 100);
+        fill(this.hue, 89, 100);
         vertex(this.dim, 0);
         vertex(-this.dim, this.dim/2);
         vertex(-this.dim, -this.dim/2);
