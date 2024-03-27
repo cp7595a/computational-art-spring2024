@@ -25,6 +25,7 @@ function draw() {
   rect(0, 0, width, height);
 
 
+
 }
 function drawGrid() {
   blendMode(DIFFERENCE); // out of for loop to help possible freezing? idk I was having some trouble
