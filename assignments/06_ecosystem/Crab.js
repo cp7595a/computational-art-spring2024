@@ -31,7 +31,7 @@ class Crab {
         this.addForce(force);
     }
 
-    wrap() {
+    wrap() { // crab walk
         if (this.pos.x < 0 || this.pos.x > width) {
             this.vel.x *= -1;
         }
@@ -54,6 +54,8 @@ class Crab {
     show() {
         push();
 
+        //CRABBBB
+        
         translate(this.pos.x, this.pos.y);
 
         fill(10, 100, 90);

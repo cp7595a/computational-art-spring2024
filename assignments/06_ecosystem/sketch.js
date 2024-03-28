@@ -3,7 +3,7 @@ let puffers = [];
 let flowField = [];
 let fishes = [];
 
-let numFishes = 15;
+let numFishes = 25;
 let numSystems = 10; 
 let numCellsWidth = 20;
 let numCellsHeight = 20;
@@ -31,7 +31,7 @@ function setup() {
     }
   }
   
-  puffer = new Crab(1100, 425)
+  puffer = new Crab(random(200, 700), 425)
 
   target = puffer.pos
 
@@ -75,6 +75,7 @@ function draw() {
   fill(34, 35, 91, 0.9);
   rect(0, 450, width, 500);
 
+  //ANIMALS AND BUBBLES
   puffer.update();
   puffer.show();
 

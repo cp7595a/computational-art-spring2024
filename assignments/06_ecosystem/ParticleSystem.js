@@ -2,6 +2,7 @@ class ParticleSystem {
     constructor(x, y, gravity) {
         this.pos = createVector(x, y);
         this.particles = [];
+        this.bubbles = [];
 
         this.active = false;
 
@@ -20,11 +21,14 @@ class ParticleSystem {
         } else {
             this.pos.x += map(noise((frameCount + this.bubbleStart)/50), 0, 1, -15, 15);
             this.pos.y += this.speed;
-            // Draw the particle system point when it isn't active (to sort of look like a firework)
         }
 
         if (this.active && this.particles < 200) {
             this.particles.push(new Particle(this.pos.x, this.pos.y, this.hue, this.gravity));
+        }
+
+        if (this.active && this.particles < 500) {
+            this.bubbles.push(new Particle(this.pos.x, this.pos.y, this.hue, this.gravity));
         }
 
         for (let particle of this.particles) {

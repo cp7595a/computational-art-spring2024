@@ -24,6 +24,8 @@ class Fish {
         this.mass = 1;
 
         this.range = 125;
+
+        this.fightBubbles = []
     }
 
     addForce(force) {
@@ -117,6 +119,16 @@ class Fish {
             force.limit(this.maxForceAttack);
 
             this.addForce(force);
+
+            // if (this.active = true){
+            //     gravity  = createVector(0, 0.1);
+            //     this.fightBubbles.push(new BubbleSystem(this.pos.x, this.pos.y, gravity));
+            //     for (let bubble of this.fightBubbles) {
+            //         bubble.update();
+            //         }
+            //     }
+
+            // tried to add bubbles to attack function but didnt know how to make them update as the position of the fish does
         }
     }
 
@@ -141,6 +153,9 @@ class Fish {
         this.addForce(alignmentForce);
 
 
+        for (let bubble of this.fightBubbles) {
+            bubble.update();
+            }
 
         this.wrap();
 

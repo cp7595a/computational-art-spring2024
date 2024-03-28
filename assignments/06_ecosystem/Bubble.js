@@ -1,7 +1,7 @@
-class Particle {
+class Bubble {
     constructor(x, y, brightness, gravity) {
         this.pos = createVector(x, y);
-        this.vel = createVector(random(-5, 5), random(-5, 5));
+        this.vel = createVector(random(0.01, 0.05), random(0.01, 0.05));
         this.acc = createVector(0, 0);
 
         this.brightness = brightness;
@@ -10,10 +10,11 @@ class Particle {
 
         this.mass = random(1, 1.5);
 
-        this.radius = 1 + this.mass;
+        this.radius = this.mass;
 
-        this.lifetime = random(300, 400);
+        this.lifetime = random(30, 55);
     }
+
 
 
     addForce(force) {
@@ -58,7 +59,7 @@ class Particle {
         translate(this.pos.x, this.pos.y);
         imageMode(CENTER);
         
-        fill(0, 0, 90, 0.05 - map(this.lifetime, 0, 100, .5, 0));
+        fill(0, 0, 90, 0.05 - map(this.lifetime, 50, 75, 0.2, 0.5));
         ellipse(0, 0, this.radius * 2);
 
         pop();
