@@ -27,7 +27,7 @@ class ParticleSystem {
             this.particles.push(new Particle(this.pos.x, this.pos.y, this.hue, this.gravity));
         }
 
-        if (this.active && this.particles < 500) {
+        if (this.active && this.particles < 100) {
             this.bubbles.push(new Particle(this.pos.x, this.pos.y, this.hue, this.gravity));
         }
 

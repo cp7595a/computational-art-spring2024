@@ -76,8 +76,8 @@ function draw() {
   rect(0, 450, width, 500);
 
   //ANIMALS AND BUBBLES
-  puffer.update();
-  puffer.show();
+  crab.update();
+  crab.show();
 
   for (let fish of fishes) {
     fish.update();
