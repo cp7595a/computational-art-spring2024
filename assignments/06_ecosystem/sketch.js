@@ -31,9 +31,9 @@ function setup() {
     }
   }
   
-  puffer = new Crab(random(200, 700), 425)
+  crab = new Crab(random(200, 700), 425)
 
-  target = puffer.pos
+  target = crab.pos
 
   for(let i = 0; i < numFishes; i++) {
     fishes.push(new Fish(random(width), random(height), target));
@@ -68,7 +68,7 @@ function draw() {
     }
   }
 
-  //SAN
+  //SAND
 
   fill(197, 72, 70, 0.9);
   rect(0, 500, width, height/6);
