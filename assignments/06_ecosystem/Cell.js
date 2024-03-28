@@ -1,4 +1,4 @@
-class Cell {
+class Cell { // glisten
     constructor(angle, xIndex, yIndex) {
         this.angle = angle;
 
