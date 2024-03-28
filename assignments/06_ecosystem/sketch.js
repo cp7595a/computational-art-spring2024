@@ -31,7 +31,7 @@ function setup() {
     }
   }
   
-  crab = new Crab(random(100, 700), 425)
+  crab = new Crab(random(300, 700), 425)
 
   target = crab.pos
 

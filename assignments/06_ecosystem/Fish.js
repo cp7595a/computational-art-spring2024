@@ -11,8 +11,8 @@ class Fish {
 
         // speeds and forces
         this.maxSpeed = 1.2;
-        this.maxForceFlee = 0.007;
-        this.maxForceAttack = 0.01;
+        this.maxForceFlee = 0.01;
+        this.maxForceAttack = 0.03;
         this.maxCohesionForce = 0.001;
         this.maxAlignmentForce = 0.001;
 
