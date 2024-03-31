@@ -23,15 +23,22 @@ function setup() {
   cellWidth = width / numCellsWidth;
   cellHeight = height / numCellsHeight;
 
+  let xoff = 0;
+  let yoff = 0;
+  let inc = 0.05;
   for (let xIndex = 0; xIndex < numCellsWidth; xIndex++) {
     flowField[xIndex] = [];
+    yoff = 0;
     for (let yIndex = 0; yIndex < numCellsHeight; yIndex++) {
-      let angle = 4 * PI;
+      let angle = map(noise(xoff. yoff), 0, 1, 350 * PI/180, 2 * PI);
       flowField[xIndex][yIndex] = new Cell(angle, xIndex, yIndex);
+      // yoff += inc;
     }
+    yoff += inc;
+    xoff += inc;
   }
   
-  crab = new Crab(random(300, 700), 425)
+  crab = new Crab(random(200, 700), 425)
 
   target = crab.pos
 

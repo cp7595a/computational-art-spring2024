@@ -33,6 +33,14 @@ class Fish {
         this.acc.add(forceWithMass);
     }
 
+    flow() {
+        let arrayIndeces = positionToFlowFieldIndex(this.pos.x, this.pos.y);
+        let angle = flowField[arrayIndeces.x][arrayIndeces.y].angle;
+        let force = p5.Vector.fromAngle(angle);
+        force.limit(this.maxForce);
+        this.addForce(force);
+    }
+
     // for the little fish
     flee(t) {
         for (let fish of fishes) {
@@ -170,6 +178,7 @@ class Fish {
 
         if (!this.active) { // needed to create a reset because it wasn't ever going back to normal
             this.active = false;
+            this.flow();
         }
     }
 

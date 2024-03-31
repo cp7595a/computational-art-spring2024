@@ -40,7 +40,7 @@ class Crab {
         }
     }
     update() {  
-            this.flow();
+            // this.flow();
             this.wrap();
     
             this.vel.add(this.acc);
