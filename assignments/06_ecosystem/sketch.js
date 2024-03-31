@@ -32,7 +32,6 @@ function setup() {
     for (let yIndex = 0; yIndex < numCellsHeight; yIndex++) {
       let angle = map(noise(xoff. yoff), 0, 1, 350 * PI/180, 2 * PI);
       flowField[xIndex][yIndex] = new Cell(angle, xIndex, yIndex);
-      // yoff += inc;
     }
     yoff += inc;
     xoff += inc;
