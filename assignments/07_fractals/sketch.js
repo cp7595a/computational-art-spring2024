@@ -4,7 +4,7 @@ let pulsingSlider;
 let diameterSlider;
 
 function setup() {
-  createCanvas(600, 400);
+  createCanvas(700, 500);
   colorMode(HSB);
   background(0, 0, 100);
   noFill();
@@ -35,7 +35,7 @@ function draw() {
   
   rotate(frameCount * rotationSlider.value());
 
-  
+  // I really liked the translate idea, so i used to kind of create a double illusion
   translate(-translateSlider.value(), 0); 
 
   
