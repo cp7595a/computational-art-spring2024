@@ -10,14 +10,18 @@ function setup() {
   noFill();
   stroke(0, 0, 100);
 
-  rotationSlider = createSlider(0, 0.1, 0.01, 0.001);
+  rotationSlider = createSlider(0, 0.05, 0.01, 0.001);
   rotationSlider.position(10, height + 10);
 
-  pulsingSlider = createSlider(0, 1.25, 0.1, 0.001);
-  pulsingSlider.position(10, height + 35);
+  colorSlider = createSlider(0, 1.25, 0.1, 0.001);
+  colorSlider.position(10, height + 35);
 
-  diameterSlider = createSlider(10, 1000, 800); 
+  diameterSlider = createSlider(10, 600, 450); 
   diameterSlider.position(10, height + 60);
+
+  translateSlider = createSlider(0, 900, 900); 
+  translateSlider.position(10, height + 85);
+
 }
 
 function draw() {
@@ -30,6 +34,9 @@ function draw() {
   scale(noise(frameCount * 0.01) + 1); 
   
   rotate(frameCount * rotationSlider.value());
+
+  
+  translate(-translateSlider.value(), 0); 
 
   
   for (let i = 0; i < 8; i++) {
