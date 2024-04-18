@@ -81,6 +81,7 @@ function draw() {
   image(star, starXpos - 100, starYpos - 100, 250, 150); 
 
   //initializing X and Y positions
+  //  x = r cos(θ) and y = r sin(θ) formula I found and used to base this off of
   let mercuryX = width / 2 + 50 * cos(mercuryAngle); // cos for X and sin for Y because if not the planets go counter-clockwise
   let mercuryY = height / 2 + 50 * sin(mercuryAngle);
   let venusX = width / 2 + 75 * cos(venusAngle);
@@ -98,6 +99,7 @@ function draw() {
   let neptuneX = width / 2 + 550 * cos(neptuneAngle); 
   let neptuneY = height / 2 + 550 * sin(neptuneAngle);
 
+  // create an angle for cos and sin and change them
   let angleChange = 1; //starting number bc I didn't know what to make it besides one
   mercuryAngle += angleChange * 0.02; 
   venusAngle += angleChange * 0.015; // make the planets slower as they get further from the sun
