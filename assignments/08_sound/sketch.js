@@ -125,7 +125,7 @@ function draw() {
 
   textSize(11);
   fill(0, 0, 100);
-  text('1-8 Mercury to Neptune:9-16 Neptune to Mercury', 10, height - 10);
+  text('1-8 Mercury to Neptune:9-16 Neptune to Mercury', 10, height - 10); // so you know what it does
 }
 
 function drawCircle(x, y, w, orbit) { //created
