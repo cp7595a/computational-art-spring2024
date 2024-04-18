@@ -103,7 +103,7 @@ function draw() {
   venusAngle += angleChange * 0.015; // make the planets slower as they get further from the sun
   earthAngle += angleChange * 0.01; 
   marsAngle += angleChange * 0.008; 
-  jupiterAngle += angleChange * 0.003; //super slow
+  jupiterAngle += angleChange * 0.0035; //super slow
   saturnAngle += angleChange  * 0.002;   
   uranusAngle += angleChange * 0.0015; // had to leave space for .001 oops
   neptuneAngle += angleChange * 0.001; 
@@ -125,7 +125,7 @@ function draw() {
 
   textSize(11);
   fill(0, 0, 100);
-  text('1-8 Mercury to Neptune:9-16 Neptune to Mercury', 10, height - 10); // so you know what it does
+  text('1-8 Mercury to Neptune:9-16 Removing from Mercury to Neptune', 10, height - 10); // so you know what it does
 }
 
 function drawCircle(x, y, w, orbit) { //created
@@ -205,9 +205,9 @@ function mousePressed() {
   userStartAudio();
 
   loop.start(); 
-
+      
   if (mouseX > starXpos - 100 && mouseX < starXpos + 100 &&
-    mouseY > starYpos - 100 && mouseY < starYpos + 100) {
+    mouseY > starYpos - 100 && mouseY < starYpos + 100) { // setting up detect box
       starSound.play();
       starXpos = random(50, 1000)
       starYpos = random(50, 1000)
