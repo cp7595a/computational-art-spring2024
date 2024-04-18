@@ -24,16 +24,17 @@ let neptuneAngle = 0;
 
 let eighth = 0;
 let major = [0,2,4,5,7,9,11,12];
-let root = 48; 
+let base = 48; 
 let count= 0;
 
 let slider;
 let speedSlider;
 
-let starXpos = 300
-let starYpos = 300
+let starXpos = 100
+let starYpos = 100
 
 function preload() {
+  // load sounds
   mercury = loadSound("./samples/NoteCMercury.mp3");
   venus = loadSound("./samples/NoteEVenus.mp3");
   earth = loadSound("./samples/NoteGEarth.mp3");
@@ -43,7 +44,9 @@ function preload() {
   uranus = loadSound("./samples/NoteG2Uranus.mp3");
   neptune = loadSound("./samples/NoteB2Neptune.mp3");
   starSound = loadSound("./samples/chimes.mp3");
+  // twinkleSound = loadSound("./samples/twinkle.mp3");
 
+  // load pics
   space = loadImage("./pics/space.jpg");
   star = loadImage("./pics/star.png");
   asteriodbelt = loadImage("./pics/asteroidbelt.png");
@@ -63,7 +66,6 @@ function setup() {
   colorMode(HSB);
   background(space);
   
- 
   slider = createSlider(0, 16, 0); 
   slider.position(10, height + 10);
   
@@ -71,17 +73,18 @@ function setup() {
   loop = new p5.SoundLoop(soundLoop, loopInterval/2);
   drawCircle(width/2, height/2, 1100, 0);
   
-
+  textSize(100);
+  fill(0, 0, 100);
+  text('Select:', slider.x + slider.width + 10, slider.y);
 }
 
 function draw() {
   background(space);
 
-  image(star, starXpos - 100, starYpos - 100, 250, 150); 
+  image(star, starXpos - 100, starYpos- 100, 250, 150); 
 
-  image(asteriodbelt, 250, 125, 725, 725);
-
-  let mercuryX = width / 2 + 50 * cos(mercuryAngle); 
+  //initializing X and Y positions
+  let mercuryX = width / 2 + 50 * cos(mercuryAngle); // cos for X and sin for Y because if not the planets go counter-clockwise
   let mercuryY = height / 2 + 50 * sin(mercuryAngle);
   let venusX = width / 2 + 75 * cos(venusAngle);
   let venusY = height / 2 + 75 * sin(venusAngle);
@@ -91,14 +94,14 @@ function draw() {
   let marsY = height / 2 + 130 * sin(marsAngle);
   let jupiterX = width / 2 + 235 * cos(jupiterAngle); 
   let jupiterY = height / 2 + 225* sin(jupiterAngle);
-  let saturnX = width / 2 + 315 * cos(saturnAngle); 
+  let saturnX = width / 2 + 315 * cos(saturnAngle);  // changing the number added by to account for the entire rotation
   let saturnY = height / 2 + 315 * sin(saturnAngle);
   let uranusX = width / 2 + 415 * cos(uranusAngle); 
   let uranusY = height / 2 + 415 * sin(uranusAngle);
   let neptuneX = width / 2 + 550 * cos(neptuneAngle); 
   let neptuneY = height / 2 + 550 * sin(neptuneAngle);
 
-  let angleChange = 1; //starting number
+  let angleChange = 1; //starting number bc I didn't know what to make it besides one
   mercuryAngle += angleChange * 0.02; 
   venusAngle += angleChange * 0.015; // make the planets slower as they get further from the sun
   earthAngle += angleChange * 0.01; 
@@ -121,12 +124,13 @@ function draw() {
   drawCircle(width/2 + 2, height/2 - 2, 1100, 0);
 
 
+  image(asteriodbelt, 250, 125, 725, 725);
 }
 
 function drawCircle(x, y, w, orbit) { //created
   // noFill(); 
 
-  if (orbit === 9) { //draw sun no movement
+  if (orbit === 9) { //draw sun no movement (9 is last drawn so)
     noStroke();
     noFill(); 
     image(sun, x - 40, y - 35, w + 10, w - 10)
@@ -140,9 +144,9 @@ function drawCircle(x, y, w, orbit) { //created
 
   count++;
 
-  w *= 0.75; // make them bigger
+  w *= 0.75; // big space between
 
-  if (orbit >= 9) { //code to make it stop after 9 circles 
+  if (orbit >= 9) { //code to make it stop after 9 circles (started with 9)
     return;
   }
 
@@ -152,13 +156,14 @@ function drawCircle(x, y, w, orbit) { //created
 
 function soundLoop(timeFromNow) {
   if (eighth % 8 === 0) {
-    if (root === 48) {
-      root += 7;
+    if (base === 48) {
+      base += 7;
     } else {
-      root -= 7;
+      base -= 7; // base by 7 and plus 7 makes a nice wrap over
     }
   }
 
+  //slider behaviors
   if (slider.value() !== 0){
 
     if (slider.value() < 9){
@@ -186,11 +191,11 @@ function soundLoop(timeFromNow) {
     neptune.play(timeFromNow);
   }
 }
-  let index = eighth %  major.length;
-  let note = midiToFreq(root + major[index]);
-  synth.play(note, 0.25, timeFromNow, 0.2);
+  let index = eighth %  major.length; // using major scale
+  let note = midiToFreq(base + major[index]);
+  synth.play(note, 0.2, timeFromNow, 0.2); //sun synth :)
   
-  eighth = eighth + 4;
+  eighth = eighth + 4; //increment by 4 to limit notes heard
 
 }
 
@@ -202,9 +207,9 @@ function mousePressed() {
 
   if (mouseX > starXpos - 100 && mouseX < starXpos + 100 &&
     mouseY > starYpos - 100 && mouseY < starYpos + 100) {
-    starSound.play();
-    starXpos = random(50, 1000)
-    starYpos = random(50, 1000)
-  }
+      starSound.play();
+      starXpos = random(50, 1000)
+      starYpos = random(50, 1000)
+    }
 
 }
