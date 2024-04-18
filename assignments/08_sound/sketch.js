@@ -12,7 +12,15 @@ let saturn;
 let uranus;
 let neptune;
 
-let mercuryRotation = 0;
+let mercuryAngle = 0;
+let venusAngle = 0;
+let earthAngle = 0;
+let marsAngle = 0;
+let jupiterAngle = 0;
+let saturnAngle = 0;
+let uranusAngle = 0;
+let neptuneAngle = 0;
+
 
 let eighth = 0;
 let major = [0,2,4,5,7,9,11,12];
@@ -20,9 +28,10 @@ let root = 48;
 let count= 0;
 
 let slider;
+let speedSlider;
 
-let starXpos = 200
-let starYpos = 200
+let starXpos = 300
+let starYpos = 300
 
 function preload() {
   mercury = loadSound("./samples/NoteCMercury.mp3");
@@ -33,10 +42,10 @@ function preload() {
   saturn = loadSound("./samples/NoteE2Saturn.mp3");
   uranus = loadSound("./samples/NoteG2Uranus.mp3");
   neptune = loadSound("./samples/NoteB2Neptune.mp3");
-  starSound = loadSound("./samples/twinkle.mp3");
+  starSound = loadSound("./samples/chimes.mp3");
 
   space = loadImage("./pics/space.jpg");
-  // star = loadImage("./pics/star.png");
+  star = loadImage("./pics/star.png");
   asteriodbelt = loadImage("./pics/asteroidbelt.png");
   sun = loadImage("./pics/sun.png");
   mercuryPic = loadImage("./pics/mercury.png");
@@ -54,50 +63,74 @@ function setup() {
   colorMode(HSB);
   background(space);
   
-  drawCircle(width/2, height/2, 950, 0);
  
   slider = createSlider(0, 16, 0); 
   slider.position(10, height + 10);
   
   synth = new p5.PolySynth();
   loop = new p5.SoundLoop(soundLoop, loopInterval/2);
+  drawCircle(width/2, height/2, 1100, 0);
   
-  console.log()
+
 }
 
 function draw() {
-  image(asteriodbelt, 380, 270, 450, 450);
+  background(space);
 
-  image(star, starXpos - 100, starYpos - 100, 200, 200);
-  console.log(starXpos, starYpos)
+  image(star, starXpos - 100, starYpos - 100, 250, 150); 
+
+  image(asteriodbelt, 250, 125, 725, 725);
+
+  let mercuryX = width / 2 + 50 * cos(mercuryAngle); 
+  let mercuryY = height / 2 + 50 * sin(mercuryAngle);
+  let venusX = width / 2 + 75 * cos(venusAngle);
+  let venusY = height / 2 + 75 * sin(venusAngle);
+  let earthX = width / 2 + 100 * cos(earthAngle); 
+  let earthY = height / 2 + 100 * sin(earthAngle);
+  let marsX = width / 2 + 130 * cos(marsAngle); 
+  let marsY = height / 2 + 130 * sin(marsAngle);
+  let jupiterX = width / 2 + 235 * cos(jupiterAngle); 
+  let jupiterY = height / 2 + 225* sin(jupiterAngle);
+  let saturnX = width / 2 + 315 * cos(saturnAngle); 
+  let saturnY = height / 2 + 315 * sin(saturnAngle);
+  let uranusX = width / 2 + 415 * cos(uranusAngle); 
+  let uranusY = height / 2 + 415 * sin(uranusAngle);
+  let neptuneX = width / 2 + 550 * cos(neptuneAngle); 
+  let neptuneY = height / 2 + 550 * sin(neptuneAngle);
+
+  let angleChange = 1; //starting number
+  mercuryAngle += angleChange * 0.02; 
+  venusAngle += angleChange * 0.015; // make the planets slower as they get further from the sun
+  earthAngle += angleChange * 0.01; 
+  marsAngle += angleChange * 0.008; 
+  jupiterAngle += angleChange * 0.003; //super slow
+  saturnAngle += angleChange  * 0.002;   
+  uranusAngle += angleChange * 0.0015; // had to leave space for .001 oops
+  neptuneAngle += angleChange * 0.001; 
+
+  // Draw planets
+  image(mercuryPic, mercuryX - 10, mercuryY - 10, 25, 15);
+  image(venusPic, venusX - 20, venusY  - 20, 45, 25);
+  image(earthPic, earthX - 10,  earthY - 15, 30, 30);
+  image(marsPic, marsX - 10, marsY - 15, 25, 25);
+  image(jupiterPic, jupiterX - 30, jupiterY - 20, 80, 50);
+  image(saturnPic, saturnX - 30, saturnY - 30, 70, 60);
+  image(uranusPic, uranusX - 20, uranusY - 25, 35, 50);
+  image(neptunePic, neptuneX - 10, neptuneY - 25, 25, 25);
+
+  drawCircle(width/2 + 2, height/2 - 2, 1100, 0);
+
 
 }
 
 function drawCircle(x, y, w, orbit) { //created
   // noFill(); 
-  if (orbit === 9) { // smallest circle should be the last one
+
+  if (orbit === 9) { //draw sun no movement
     noStroke();
-    noFill(); // sun :)
-    image(sun, x - 35, y - 30, w + 5, w - 10)
-  }if (orbit === 8) { // smallest circle should be the last one
-    push();
-    image(mercuryPic, x - 45, y, 25, 15)
-    pop();
-  }if (orbit === 7) { 
-    image(venusPic, x + 10, y + 10, w - 90, w - 105)
-  }if (orbit === 6) { 
-    image(earthPic, x, y - 70, w-145, w-145)
-  }if (orbit === 5) { 
-    image(marsPic, x - 55, y - 80, w-205, w-205)
-  }if (orbit === 4) { 
-    image(jupiterPic, x + 105, y- 150 + 150, w-225, w-350)
-  }if (orbit === 3) { 
-    image(saturnPic, x + 150, y, w-300, w-460)
-  }if (orbit === 2) { 
-    image(neptunePic, x + 335, y - 70, w - 500, w - 500)
-  }if (orbit === 1) { 
-    image(uranusPic, x + 245, y - 70, w - 675, w - 650)
-  }else {
+    noFill(); 
+    image(sun, x - 40, y - 35, w + 10, w - 10)
+    console.log(x, y)} else {
     noFill();
     stroke(0, 0, 100, 0.3);
     
@@ -109,11 +142,11 @@ function drawCircle(x, y, w, orbit) { //created
 
   w *= 0.75; // make them bigger
 
-  if (orbit >= 9) { //code to make it stop after 8 circles
+  if (orbit >= 9) { //code to make it stop after 9 circles 
     return;
   }
 
-  drawCircle(x, y, w, orbit + 1); 
+  drawCircle(x, y, w, orbit + 1);
 
 }
 
@@ -167,9 +200,11 @@ function mousePressed() {
 
   loop.start(); 
 
-  if (mouseX > starX - 100 && mouseX < starX + 100 &&
-    mouseY > starY - 100 && mouseY < starY + 100) {
-    star.play(timeFromNow);
+  if (mouseX > starXpos - 100 && mouseX < starXpos + 100 &&
+    mouseY > starYpos - 100 && mouseY < starYpos + 100) {
+    starSound.play();
+    starXpos = random(50, 1000)
+    starYpos = random(50, 1000)
   }
 
 }
