@@ -73,15 +73,12 @@ function setup() {
   loop = new p5.SoundLoop(soundLoop, loopInterval/2);
   drawCircle(width/2, height/2, 1100, 0);
   
-  textSize(100);
-  fill(0, 0, 100);
-  text('Select:', slider.x + slider.width + 10, slider.y);
 }
 
 function draw() {
   background(space);
 
-  image(star, starXpos - 100, starYpos- 100, 250, 150); 
+  image(star, starXpos - 100, starYpos - 100, 250, 150); 
 
   //initializing X and Y positions
   let mercuryX = width / 2 + 50 * cos(mercuryAngle); // cos for X and sin for Y because if not the planets go counter-clockwise
@@ -125,6 +122,10 @@ function draw() {
 
 
   image(asteriodbelt, 250, 125, 725, 725);
+
+  textSize(11);
+  fill(0, 0, 100);
+  text('1-8 Mercury to Neptune:9-16 Neptune to Mercury', 10, height - 10);
 }
 
 function drawCircle(x, y, w, orbit) { //created
