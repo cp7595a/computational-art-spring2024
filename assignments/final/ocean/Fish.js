@@ -10,11 +10,11 @@ class Fish {
         this.active = false; // setting up activation for the flee v fight down below
 
         // speeds and forces
-        this.maxSpeed = 1.2;
+        this.maxSpeed = 1;
         this.maxForceFlee = 0.01;
         this.maxForceAttack = 0.03;
-        this.maxCohesionForce = 0.001;
-        this.maxAlignmentForce = 0.001;
+        this.maxCohesionForce = 0.01;
+        this.maxAlignmentForce = 0.005;
 
         this.dim = random(10, 30);
         this.angle = 0;
@@ -23,7 +23,7 @@ class Fish {
 
         this.mass = 1;
 
-        this.range = 200;
+        this.range = 125;
 
         this.fightBubbles = []
 
@@ -82,7 +82,7 @@ class Fish {
     //COHESE
 
     cohesion(closeFishes) {
-        this.maxSpeed = map(this.dim, 10, 30, 2.1, 0.1);
+        this.maxSpeed = map(this.dim, 10, 30, 1, 0.5);
 
         if (!this.active && closeFishes.length > 0) { // Check if not attacking
             let sumPositions = createVector(0, 0);

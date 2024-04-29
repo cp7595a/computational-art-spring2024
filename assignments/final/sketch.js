@@ -11,6 +11,8 @@
 
 let leftKeyPressed = false;
 let rightKeyPressed = false;
+let mercuryState = false;
+let venusState = false;
 
 let systems = [];
 let puffers = [];
@@ -19,7 +21,7 @@ let fishes = [];
 
 let health = 50; 
 
-let numFishes = 15;
+let numFishes = 25;
 let numSystems = 10; 
 let numCellsWidth = 20;
 let numCellsHeight = 20;
@@ -43,14 +45,14 @@ let waterPlay = false;
 
 function preload() {
   // load sounds
-  // mercury = loadSound("./samples/NoteCMercury.mp3");
-  // venus = loadSound("./samples/NoteEVenus.mp3");
-  // earth = loadSound("./samples/NoteGEarth.mp3");
-  // mars = loadSound("./samples/NoteBMars.mp3");
-  // jupiter = loadSound("./samples/NoteDJupiter.mp3");
-  // saturn = loadSound("./samples/NoteE2Saturn.mp3");
-  // uranus = loadSound("./samples/NoteG2Uranus.mp3");
-  // neptune = loadSound("./samples/NoteB2Neptune.mp3");
+  mercury = loadSound("./samples/NoteCMercury.mp3");
+  venus = loadSound("./samples/NoteEVenus.mp3");
+  earth = loadSound("./samples/NoteGEarth.mp3");
+  mars = loadSound("./samples/NoteBMars.mp3");
+  jupiter = loadSound("./samples/NoteDJupiter.mp3");
+  saturn = loadSound("./samples/NoteE2Saturn.mp3");
+  uranus = loadSound("./samples/NoteG2Uranus.mp3");
+  neptune = loadSound("./samples/NoteB2Neptune.mp3");
   // starSound = loadSound("./samples/chimes.mp3");
   // twinkleSound = loadSound("./samples/twinkle.mp3");
   water = loadSound("./samples/water.mp3");
@@ -58,7 +60,7 @@ function preload() {
 
   // load pics
   space = loadImage("./pics/space.jpg");
-  sun = loadImage("./pics/sun.png");
+  astronaut = loadImage("./pics/astronaut.png");
   mercuryPic = loadImage("./pics/mercury.png");
   venusPic = loadImage("./pics/venus.png");
   earthPic = loadImage("./pics/earth.png");
@@ -88,7 +90,7 @@ function setup() {
   colorMode(HSB);
   noStroke();
 
-  translateSlider = createSlider(0, 2000, 1000, 50); 
+  translateSlider = createSlider(0, 2000, 2000, 50); 
   translateSlider.position(10, height + 85);
 
 
@@ -135,7 +137,8 @@ function draw() {
 
   push();
   translate(2000 - translateSlider.value(), 0);
-  image(space, 0, 0, 1200, 600)
+  image(space, 0, 0, 1200, 600);
+  image(astronaut, 0, 0, 50, 90)
 
   image(mercuryPic, 100, 100, 50, 50)
   image(venusPic, 200, 200, 70, 70)
@@ -225,34 +228,27 @@ function soundLoop(timeFromNow) {
     }
   }
 
-//   //slider behaviors
-//   if (slider.value() !== 0){
+  mercury.play()
+  venus.play()
+  mars.play()
+  earth.play()
+  jupiter.play()
+  saturn.play()
+  neptune.play()
+  uranus.play()
 
-//     if (slider.value() < 9){
-//     mercury.play(timeFromNow);
-//   }
-//    if (slider.value() !== 1 && slider.value() < 10){
-//     venus.play(timeFromNow);
-//   }
-//     if (slider.value() > 2 && slider.value() < 11){
-//     earth.play(timeFromNow);
-//   }
-//     if (slider.value() > 3 && slider.value() < 12){
-//     mars.play(timeFromNow);
-//   }
-//     if (slider.value() > 4 && slider.value() < 13){
-//     jupiter.play(timeFromNow);
-//   }
-//     if (slider.value() > 5 && slider.value() < 14){
-//     saturn.play(timeFromNow);
-//   }
-//    if (slider.value() > 6 && slider.value() < 15){
-//     uranus.play(timeFromNow);
-//   }
-//     if (slider.value() > 7){
-//     neptune.play(timeFromNow);
-//   }
-// }
+if(translateSlider.value() < 1751){
+  mercury.stop()
+  venus.stop()
+  mars.stop()
+  earth.stop()
+  jupiter.stop()
+  saturn.stop()
+  neptune.stop()
+  uranus.stop()
+
+}
+
 if(translateSlider.value() < 750){
   t = 0.5
   console.log('A')
@@ -297,6 +293,15 @@ function keyPressed() {
   } else if (keyCode === RIGHT_ARROW) {
       rightKeyPressed = true;
   }
+
+  // if(MOUSEX == mercuryPic.x){
+  //   if(MOUSEY == mercuryPic.Y){
+  //     mercuryState = true;}
+  // }
+  // if(MOUSEX == venusState.x){
+  //   if(MOUSEY == venusState.Y){
+  //     venusState == true;}
+  // }
 }
 
 function keyReleased() {
