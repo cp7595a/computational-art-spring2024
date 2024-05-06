@@ -12,8 +12,7 @@ class Fish {
         // speeds and forces
         this.maxSpeed = 1;
         this.maxForceFlee = 0.01;
-        this.maxForceAttack = 0.03;
-        this.maxCohesionForce = 0.01;
+        this.maxCohesionForce = 0.001;
         this.maxAlignmentForce = 0.005;
 
         this.dim = random(10, 30);
@@ -23,7 +22,7 @@ class Fish {
 
         this.mass = 1;
 
-        this.range = 125;
+        this.range = 150;
 
         this.fightBubbles = []
 
@@ -79,44 +78,48 @@ class Fish {
         return closeFishes;
     }
 
-    //COHESE
+    //COHERE
 
     cohesion(closeFishes) {
         this.maxSpeed = map(this.dim, 10, 30, 1, 0.5);
-
+        
         if (!this.active && closeFishes.length > 0) { // Check if not attacking
-            let sumPositions = createVector(0, 0);
-            for (let fish of closeFishes) {
-                sumPositions.add(fish.pos);
+            // Filter closeFishes array to include only fishes of the same type
+            let sameTypeFishes = closeFishes.filter(fish => fish.fish_type === this.fish_type);
+            
+            if (sameTypeFishes.length > 0) {
+                let sumPositions = createVector(0, 0);
+                for (let fish of sameTypeFishes) {
+                    sumPositions.add(fish.pos);
+                }
+                sumPositions.div(sameTypeFishes.length);
+    
+                let desired = p5.Vector.sub(sumPositions, this.pos);
+                desired.setMag(this.maxSpeed);
+                let steeringForce = p5.Vector.sub(desired, this.vel);
+                steeringForce.limit(this.maxCohesionForce);
+                return steeringForce;
             }
-            sumPositions.div(closeFishes.length);
-
-            let desired = p5.Vector.sub(sumPositions, this.pos);
-            desired.setMag(this.maxSpeed);
-            let steeringForce = p5.Vector.sub(desired, this.vel);
-            steeringForce.limit(this.maxCohesionForce);
-            return steeringForce;
-
         }
-
+    
         return createVector(0, 0);
     }
-
-
-    //ALINE
+    // ALIGN
     alignment(closeFishes) {
+        let sameTypeFishes = closeFishes.filter(fish => fish.fish_type === this.fish_type);
+        
         let sumOfVelocities = createVector(0, 0);
-        for (let fish of closeFishes) {
+        for (let fish of sameTypeFishes) {
             sumOfVelocities.add(fish.vel);
         }
-        if (closeFishes.length > 0) {
-            sumOfVelocities.div(closeFishes.length);
+        if (sameTypeFishes.length > 0) {
+            sumOfVelocities.div(sameTypeFishes.length);
         }
         sumOfVelocities.setMag(this.maxSpeed);
-
+    
         let steeringForce = p5.Vector.sub(sumOfVelocities, this.vel);
         steeringForce.limit(this.maxAlignmentForce);
-
+    
         return steeringForce;
     }
 
@@ -131,16 +134,6 @@ class Fish {
             force.limit(this.maxForceAttack);
 
             this.addForce(force);
-
-            // if (this.active = true){
-            //     gravity  = createVector(0, 0.1);
-            //     this.fightBubbles.push(new BubbleSystem(this.pos.x, this.pos.y, gravity));
-            //     for (let bubble of this.fightBubbles) {
-            //         bubble.update();
-            //         }
-            //     }
-
-            // tried to add bubbles to attack function but didnt know how to make them update as the position of the fish does
         }
     }
 
@@ -155,6 +148,7 @@ class Fish {
         // }
 
 
+        
         let cohesionForce = this.cohesion(closeFishes);
         cohesionForce.mult(1);
         this.addForce(cohesionForce);

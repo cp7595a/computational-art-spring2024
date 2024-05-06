@@ -8,30 +8,51 @@
 // Start river/park
 // Under the ocean 
 // Space
+let blueFilterStrength = 100; 
+let img;
+let imgWidth = 50;
+let imgHeight = 50;
 
 let leftKeyPressed = false;
 let rightKeyPressed = false;
 let mercuryState = false;
 let venusState = false;
+let earthState = false;
+let marsState = false;
+let jupiterState = false;
+let saturnState = false;
+let uranusState = false;
+let neptuneState = false;
 
+let mercurySize = 0;
+let venusSize = 0;
+let earthSize = 0;
+let marsSize = 0;
+let jupiterSize = 0;
+let saturnSize = 0;
+let uranusSize = 0;
+let neptuneSize = 0;
+
+let translatedFlowField = [];
 let systems = [];
-let puffers = [];
 let flowField = [];
 let fishes = [];
 
 let health = 50; 
 
-let numFishes = 25;
+let numFishes = 20;
 let numSystems = 10; 
 let numCellsWidth = 20;
 let numCellsHeight = 20;
-let numPuffers = 1;
 
 let loop;
 let loopInterval = 1;
 let timeFromNow = 1;
+let index;
 
-let eighth = 0;
+let p2;
+
+let eighth = 2;
 let major = [0,2,4,5,7,9,11,12];
 let base = 48; 
 let count= 0;
@@ -53,10 +74,7 @@ function preload() {
   saturn = loadSound("./samples/NoteE2Saturn.mp3");
   uranus = loadSound("./samples/NoteG2Uranus.mp3");
   neptune = loadSound("./samples/NoteB2Neptune.mp3");
-  // starSound = loadSound("./samples/chimes.mp3");
-  // twinkleSound = loadSound("./samples/twinkle.mp3");
   water = loadSound("./samples/water.mp3");
-  // bubbles = loadSound("./samples/bubbles.mp3");
 
   // load pics
   space = loadImage("./pics/space.jpg");
@@ -69,10 +87,12 @@ function preload() {
   jupiterPic = loadImage("./pics/jupiter.png");
   uranusPic = loadImage("./pics/uranus.png");
   neptunePic = loadImage("./pics/neptune.png");
+  spaceship =  loadImage("./pics/spaceship.png");
 
   ocean = loadImage("./pics/ocean.png");
-  crabby = loadImage("./pics/crab.png");
+  crab1 = loadImage("./pics/crab.png");
   dead_crab = loadImage("./pics/dead_crab.png");
+  snail1 = loadImage("./pics/snail.png");
   pirate = loadImage("./pics/pirate.png");
   pirate2 = loadImage("./pics/pirate2.png");
   carp = loadImage("./pics/carp.png")
@@ -90,8 +110,8 @@ function setup() {
   colorMode(HSB);
   noStroke();
 
-  translateSlider = createSlider(0, 2000, 2000, 50); 
-  translateSlider.position(10, height + 85);
+  translateSlider = createSlider(0, 2000, 2000, 1000); 
+  translateSlider.position(10, height + 20);
 
 
   cellWidth = width / numCellsWidth;
@@ -110,8 +130,27 @@ function setup() {
     yoff += inc;
     xoff += inc;
   }
+
+  for (let xIndex = 0; xIndex < numCellsWidth; xIndex++) {
+    translatedFlowField[xIndex] = [];
+    yoff = 0;
+    for (let yIndex = 0; yIndex < numCellsHeight; yIndex++) {
+      let angle = map(noise(xoff, yoff), 0, 1, 0, 2 * PI);
+      translatedFlowField[xIndex][yIndex] = new Cell(angle, xIndex, yIndex);
+    }
+    yoff += inc;
+    xoff += inc;
+  }
+
+  img = createCapture(VIDEO);
+  img.size(imgWidth, imgHeight);
+  img.hide();
+ 
+  ship = new Ship(random(200, 700),random(200, 700))
   p2 = new Person(0, 500);
+  p3 = new Astronaut(width/2, height/2);
   crab = new Crab(random(200, 700), 500)
+  snail = new Snail(random(200, 700), 500)
 
   target = crab.pos
 
@@ -135,23 +174,83 @@ function setup() {
 function draw() {
   background(0, 0, 100);
 
+  // SPACE SCENE
   push();
   translate(2000 - translateSlider.value(), 0);
   image(space, 0, 0, 1200, 600);
-  image(astronaut, 0, 0, 50, 90)
 
-  image(mercuryPic, 100, 100, 50, 50)
-  image(venusPic, 200, 200, 70, 70)
-  image(earthPic, 300, 300, 70, 70)
-  image(marsPic, 400, 400, 65, 65)
-  image(jupiterPic, 500, 300, 105, 100)
-  image(saturnPic, 600, 200, 100, 75 )
-  image(uranusPic, 750, 100, 65, 65)
-  image(neptunePic, 850, 50, 70, 70)
+  for (let xIndex = 0; xIndex < numCellsWidth; xIndex++) {
+    for (let yIndex = 0; yIndex < numCellsHeight; yIndex++) {
+      translatedFlowField[xIndex][yIndex].update();
+      translatedFlowField[xIndex][yIndex].show();
+    }
+  }
 
+  img.loadPixels();
+
+
+  if (mercuryState) {
+    mercurySize += random(0.2, -0.2);
+  }
+  if (venusState) {
+    venusSize += random(0.2, -0.2);
+  }
+  if (earthState) {
+    earthSize += random(0.2, -0.2);
+  }
+  if (marsState) {
+    marsSize += random(0.2, -0.2);
+  }
+  if (jupiterState) {
+    jupiterSize += random(0.2, -0.2);
+  }
+  if (saturnState) {
+    saturnSize += random(0.2, -0.2);
+  }
+  if (uranusState) {
+    uranusSize += random(0.2, -0.2);
+  }
+  if (neptuneState) {
+    neptuneSize += random(0.2, -0.2);
+  }
+ 
+ 
+  mercurySize = constrain(mercurySize, 50, 70);
+  venusSize = constrain(venusSize, 50, 70);
+  earthSize = constrain(earthSize, 50, 70);
+  marsSize = constrain(marsSize, 50, 70);
+  jupiterSize = constrain(jupiterSize, 50, 70);
+  saturnSize = constrain(saturnSize, 50, 70);
+  uranusSize = constrain(uranusSize, 50, 70);
+  neptuneSize = constrain(neptuneSize, 50, 70);
+
+  image(mercuryPic, 60, 315, mercurySize, mercurySize)
+  image(venusPic, 150, 300, venusSize + 20, venusSize + 20)
+  image(earthPic, 250, 300, earthSize + 20, earthSize + 20)
+  image(marsPic, 350, 300, marsSize + 15, marsSize + 15)
+  image(jupiterPic, 500, 300, jupiterSize + 55, jupiterSize + 50)
+  image(saturnPic, 650, 300, saturnSize + 50, saturnSize + 25)
+  image(uranusPic, 775, 300, uranusSize + 15, uranusSize + 15)
+  image(neptunePic, 875, 300, neptuneSize + 20, neptuneSize + 20)
+  
+
+  fill(100);
+  textSize(23);
+  textFont('Times New Roman');
+  text('Click the planets!', 450, 25);
+
+  p3.update();
+  p3.show();
+
+  ship.update();
+  ship.show();
+
+  // rotate(ship.angle);
+  
 
   pop();
 
+  // OCEAN SCENE
   push();
   translate(1000 - translateSlider.value(), 0);
 
@@ -164,16 +263,21 @@ function draw() {
     }
   }
 
-  textSize(12);
-  fill(100);
-  text(health, crab.pos.x + 60, crab.pos.y - 20);
-  fill(0, 100, 100);
-  rect(crab.pos.x, crab.pos.y - 25, health, 5);
-
   
 
   crab.update();
   crab.show();
+  snail.update();
+  snail.show();
+
+  if (health >= 0){
+    textSize(12);
+    fill(100);
+    text(health, crab.pos.x + 60, crab.pos.y - 20);
+    text("Click me!", crab.pos.x + 10, crab.pos.y + 85);
+    fill(0, 100, 100);
+    rect(crab.pos.x, crab.pos.y - 25, health, 5);
+  }
 
 
   for (let fish of fishes) {
@@ -184,6 +288,10 @@ function draw() {
 
   p2.update()
   p2.show()
+
+  if (health < 0){
+    image(dead_crab, p2.pos.x - 5, p2.pos.y - 20, 65, 40);
+}
   
   if (leftKeyPressed) {
     p2.vel.x = -1;
@@ -228,16 +336,18 @@ function soundLoop(timeFromNow) {
     }
   }
 
-  mercury.play()
-  venus.play()
-  mars.play()
-  earth.play()
-  jupiter.play()
-  saturn.play()
-  neptune.play()
-  uranus.play()
+  const planets = [mercury, venus, earth, mars, jupiter, saturn, uranus, neptune];
+  const states = [mercuryState, venusState, earthState, marsState, jupiterState, saturnState, uranusState, neptuneState];
+  
+  for (let i = 0; i < planets.length; i++) {
+    if (states[i]) {
+      planets[i].play();
+    } else {
+      planets[i].stop();
+    }
+  }
 
-if(translateSlider.value() < 1751){
+if(translateSlider.value() != 2000){
   mercury.stop()
   venus.stop()
   mars.stop()
@@ -250,41 +360,109 @@ if(translateSlider.value() < 1751){
 }
 
 if(translateSlider.value() < 750){
-  t = 0.5
-  console.log('A')
+  t = 1
   water.stop();
   } else if(translateSlider.value() > 751 && translateSlider.value() < 1750){
-  t = 2
-  console.log('B')
-  water.play();
-  }else if(translateSlider.value() > 1751){
-  t = 4
-  console.log('C')
-  water.stop();
+    t = 2
+    water.play();
+  }else if(translateSlider.value() == 2000){
+    t = 4
+    water.stop();
 }
 
-  let index = eighth %  major.length; // using major scale
+  let index = eighth %  major.length; 
   let note = midiToFreq(base + major[index]);
-  synth.play(note, 0.2, timeFromNow, 0.2); //sun synth :)
- 
+  synth.play(note, 0.2, timeFromNow, 0.2); 
 
   eighth = eighth + t;
 
+  if(translateSlider.value() == 2000){
+    index = 5
+  }
+  if (translateSlider.value() > 751 && translateSlider.value() < 1750){
+    index = 0
+  }
+  if(translateSlider.value() < 750){
+    index = 2
+  }
 
-  console.log(t, translateSlider.value())
   pop();
 }
 
 function mousePressed() {
   userStartAudio();
 
-  loop.start(); 
+  loop.start();
 
+  // CRAB HEALTH BEHAVIOR //
   if (mouseX >= crab.pos.x && mouseX <= crab.pos.x + crab.dim &&
     mouseY >= crab.pos.y && mouseY <= crab.pos.y + crab.dim) {
     health -= 5;
-}
+  }
 
+  // TURN ON PLANET SOUND WHEN CLICKED // (tried to make a planet class but this part was too hard to implement)
+    if (mouseX >= 60 && mouseX <= 60 + mercurySize && mouseY >= 315 && mouseY <= 315 + mercurySize) {
+      if (mercury.isPlaying()) {
+        mercuryState = false;
+      } else {
+        mercuryState = true;
+      }
+  }
+
+  if (mouseX >= 150 && mouseX <= 150 + venusSize + 20 && mouseY >= 300 && mouseY <= 300 + venusSize + 20) {
+      if (venus.isPlaying()) {
+        venusState = false;
+      } else {
+        venusState = true;
+      }
+  }
+
+  if (mouseX >= 250 && mouseX <= 250 + earthSize + 20 && mouseY >= 300 && mouseY <= 300 + earthSize + 20) {
+      if (earth.isPlaying()) {
+        earthState = false;
+      } else {
+        earthState = true;
+      }
+  }
+
+  if (mouseX >= 360 && mouseX <= 360 + marsSize + 15 && mouseY >= 300 && mouseY <= 300 + marsSize + 15) {
+      if (mars.isPlaying()) {
+        marsState = false;
+      } else {
+        marsState = true;
+      }
+  }
+
+  if (mouseX >= 500 && mouseX <= 500 + jupiterSize + 55 && mouseY >= 300 && mouseY <= 300 + jupiterSize + 50) {
+      if (jupiter.isPlaying()) {
+        jupiterState = false;
+      } else {
+        jupiterState = true;
+      }
+  }
+
+  if (mouseX >= 650 && mouseX <= 650 + saturnSize + 50 && mouseY >= 300 && mouseY <= 300 + saturnSize + 25) {
+      if (saturn.isPlaying()) {
+        saturnState = false;
+      } else {
+        saturnState = true;
+      }
+    }
+  if (mouseX >= 775 && mouseX <= 775 + uranusSize + 15 && mouseY >= 300 && mouseY <= 300 + uranusSize + 15) {
+      if (uranus.isPlaying()) {
+        uranusState = false;
+      } else {
+        uranusState = true;
+      }
+  }
+
+  if (mouseX >= 875 && mouseX <= 875 + neptuneSize + 20 && mouseY >= 300 && mouseY <= 300 + neptuneSize + 20) {
+      if (neptune.isPlaying()) {
+        neptuneState = false;
+      } else {
+        neptuneState = true;
+      }
+  }
 }
 
 function keyPressed() {
@@ -294,14 +472,6 @@ function keyPressed() {
       rightKeyPressed = true;
   }
 
-  // if(MOUSEX == mercuryPic.x){
-  //   if(MOUSEY == mercuryPic.Y){
-  //     mercuryState = true;}
-  // }
-  // if(MOUSEX == venusState.x){
-  //   if(MOUSEY == venusState.Y){
-  //     venusState == true;}
-  // }
 }
 
 function keyReleased() {

@@ -1,4 +1,4 @@
-class Crab {
+class Snail {
     constructor(x, y) {
 
         this.pos = createVector(x, y);
@@ -31,20 +31,38 @@ class Crab {
         this.addForce(force);
     }
 
-    wrap() { // crab walk
+    wrap() { 
         let wall = width - 75
         if (this.pos.x < 0 || this.pos.x > wall) {
             this.vel.x *= -1;
         }
+        
+    }
+    crab() { 
+        if (crab.pos.x - snail.pos.x <= 100) {
+           this.pos.x = crab.pos.x + 20
+           this.pos.y = crab.pos.y - 75
+        } 
+        
+    }
+    death() { 
+        if (health <= 0) {
+           this.pos.x = p2.pos.x - 20;
+           this.pos.y = 500;
+        } 
+        
     }
     update() {  
             this.wrap();
+            this.crab();
+            this.death();
     
             this.vel.add(this.acc);
             this.vel.limit(this.maxSpeed);
             this.pos.add(this.vel);
     
             this.acc.set(0,0);
+
         }
     
 
@@ -52,16 +70,11 @@ class Crab {
         push();
         
         translate(this.pos.x, this.pos.y);
-
+        
         fill(10, 100, 90);
 
+        image(snail1, 0, 50, 30, 30);
 
-        if (health == 0){
-            image(dead_crab, 0, 15, 75, 50);
-            this.vel.x = 0
-        } else if(health > 0){
-            image(crab1, 0, 0, 75, 75);
-        }
 
 
         pop();

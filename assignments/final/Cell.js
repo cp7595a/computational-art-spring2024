@@ -1,4 +1,4 @@
-class Cell { // glisten
+class Cell {
     constructor(angle, xIndex, yIndex) {
         this.angle = angle;
 
@@ -17,8 +17,8 @@ class Cell { // glisten
 
 
     update() {
-        this.offsetX += random(-0.001, 0.001);
-        this.offsetY += random(-0.001, 0.001);
+        this.offsetX += random(-0.1, 0.1);
+        this.offsetY += random(-0.1, 0.1);
         this.scaleOffset += random(-0.001, 0.001);
     
         if (this.offsetX > 2 || this.offsetX < -2) {
@@ -49,7 +49,6 @@ class Cell { // glisten
         rotate(PI/4);
         scale(this.scaleOffset);
         rect(0, 0, cellWidth/2, cellHeight);
-        // rotate(this.angle);
   
 
         
