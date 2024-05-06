@@ -103,13 +103,14 @@ function preload() {
   ocean = loadImage("./pics/ocean.png");
   crab1 = loadImage("./pics/crab.png");
   dead_crab = loadImage("./pics/dead_crab.png");
-  snail1 = loadImage("./pics/snail.png");
+  snail1 = loadImage("./pics/Snail.png");
   pirate = loadImage("./pics/pirate.png");
   pirate2 = loadImage("./pics/pirate2.png");
   carp = loadImage("./pics/carp.png")
   lionfish = loadImage("./pics/lionfish.png");
-  blue = loadImage("./pics/bluediscus.png");
-  salmon = loadImage("./pics/salmon.png")
+  bluediscus = loadImage("./pics/BlueDiscus.png");
+  salmon = loadImage("./pics/salmon.png");
+
 
   mtns = loadImage("./pics/mountains.png");
   bird1 = loadImage("./pics/bird1.png");

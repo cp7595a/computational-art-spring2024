@@ -197,7 +197,7 @@ class Fish {
             image(salmon, this.dim, this.dim/2, 35 + this.dim, 15 + this.dim);
         }
         if (this.fish_type == 3){
-            image(blue, this.dim, this.dim/2, 25 + this.dim, 20 + this.dim);
+            image(bluediscus, this.dim, this.dim/2, 25 + this.dim, 20 + this.dim);
         }
        
         pop();
