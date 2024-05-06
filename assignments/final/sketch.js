@@ -108,7 +108,7 @@ function preload() {
   pirate2 = loadImage("./pics/pirate2.png");
   carp = loadImage("./pics/carp.png")
   lionfish = loadImage("./pics/lionfish.png");
-  blue = loadImage("./pics/bluediscus.png");
+  blue = loadImage("./pics/BlueDiscus.png");
   salmon = loadImage("./pics/salmon.png");
 
 
