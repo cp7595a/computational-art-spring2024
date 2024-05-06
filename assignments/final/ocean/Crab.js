@@ -10,10 +10,6 @@ class Crab {
 
         this.dim = 65;
 
-        this.hue = 180;
-        this.saturation = 70;
-        this.brightness = 100;
-
         this.mass = this.dim + random(80, 100);
 
     }

@@ -47,7 +47,7 @@ class Snail {
     }
     death() { 
         if (health <= 0) {
-           this.pos.x = p2.pos.x - 20;
+           this.pos.x = p2.pos.x - 25;
            this.pos.y = 500;
         } 
         

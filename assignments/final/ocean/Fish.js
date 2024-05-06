@@ -104,6 +104,7 @@ class Fish {
     
         return createVector(0, 0);
     }
+    
     // ALIGN
     alignment(closeFishes) {
         let sameTypeFishes = closeFishes.filter(fish => fish.fish_type === this.fish_type);

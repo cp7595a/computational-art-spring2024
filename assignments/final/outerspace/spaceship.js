@@ -24,15 +24,15 @@ class Ship {
     }
 
     wrap() {
-        if (this.pos.x < -10) {
+        if (this.pos.x < 0) {
             this.pos.x = width;
-        } else if (this.pos.x > width - 10) {
+        } else if (this.pos.x > width) {
             this.pos.x = 0; 
         }
     
-        if (this.pos.y < -10) {
+        if (this.pos.y < 0) {
             this.pos.y = height; 
-        } else if (this.pos.y > height - 10) {
+        } else if (this.pos.y > height) {
             this.pos.y = 0;
         }
     }
@@ -47,7 +47,11 @@ class Ship {
         this.pos.add(this.vel);
         this.acc.set(0, 0);
 
-        this.angle += this.angleSpeed;
+        if (leftKeyPressed = false){
+
+        }else{
+            this.angle += this.angleSpeed;
+        }
     }
 
     show() {
@@ -61,7 +65,7 @@ class Ship {
         noTint();
         image(spaceship, 0, 0, 150, 350)
 
-
+    
         pop();
     }
 }

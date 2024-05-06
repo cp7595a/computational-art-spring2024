@@ -8,7 +8,12 @@
 // Start river/park
 // Under the ocean 
 // Space
-let blueFilterStrength = 100; 
+let rain = [];
+let rainAmt = 15;
+let sunflowers = []; // Array to store sunflowers
+
+
+
 let img;
 let imgWidth = 50;
 let imgHeight = 50;
@@ -50,6 +55,12 @@ let loopInterval = 1;
 let timeFromNow = 1;
 let index;
 
+let gravitationalConstant = 0.00001;
+let downwardGravity;
+let wind;
+
+
+let p3;
 let p2;
 
 let eighth = 2;
@@ -100,7 +111,10 @@ function preload() {
   blue = loadImage("./pics/bluediscus.png");
   salmon = loadImage("./pics/salmon.png")
 
-  mtns = loadImage("./pics/mountains.png")
+  mtns = loadImage("./pics/mountains.png");
+  bird1 = loadImage("./pics/bird1.png");
+  bird2 = loadImage("./pics/bird2.png");
+  sunflower = loadImage("./pics/Sunflower.png");
 }
 
 
@@ -110,7 +124,7 @@ function setup() {
   colorMode(HSB);
   noStroke();
 
-  translateSlider = createSlider(0, 2000, 2000, 1000); 
+  translateSlider = createSlider(0, 2000, 0, 1000); 
   translateSlider.position(10, height + 20);
 
 
@@ -141,6 +155,14 @@ function setup() {
     yoff += inc;
     xoff += inc;
   }
+
+  bird = new Bird(100, 300);
+
+  for (let i = 0; i < 10; i++) { // Adjust the number of sunflowers as needed
+    let x = random(width); // Generate random x position
+    let y = random(height/1.5, height - 50); // Generate random y position
+    sunflowers.push(new Sunflower(x, y, bird.pos.x)); // Create and store a new sunflower
+}
 
   img = createCapture(VIDEO);
   img.size(imgWidth, imgHeight);
@@ -186,8 +208,6 @@ function draw() {
     }
   }
 
-  img.loadPixels();
-
 
   if (mercuryState) {
     mercurySize += random(0.2, -0.2);
@@ -216,19 +236,19 @@ function draw() {
  
  
   mercurySize = constrain(mercurySize, 50, 70);
-  venusSize = constrain(venusSize, 50, 70);
-  earthSize = constrain(earthSize, 50, 70);
-  marsSize = constrain(marsSize, 50, 70);
-  jupiterSize = constrain(jupiterSize, 50, 70);
+  venusSize = constrain(venusSize, 70, 90);
+  earthSize = constrain(earthSize, 70, 90);
+  marsSize = constrain(marsSize, 65, 85);
+  jupiterSize = constrain(jupiterSize, 105, 120);
   saturnSize = constrain(saturnSize, 50, 70);
   uranusSize = constrain(uranusSize, 50, 70);
   neptuneSize = constrain(neptuneSize, 50, 70);
 
   image(mercuryPic, 60, 315, mercurySize, mercurySize)
-  image(venusPic, 150, 300, venusSize + 20, venusSize + 20)
-  image(earthPic, 250, 300, earthSize + 20, earthSize + 20)
-  image(marsPic, 350, 300, marsSize + 15, marsSize + 15)
-  image(jupiterPic, 500, 300, jupiterSize + 55, jupiterSize + 50)
+  image(venusPic, 150, 300, venusSize, venusSize)
+  image(earthPic, 250, 300, earthSize, earthSize)
+  image(marsPic, 350, 300, marsSize, marsSize)
+  image(jupiterPic, 500, 300, jupiterSize, jupiterSize)
   image(saturnPic, 650, 300, saturnSize + 50, saturnSize + 25)
   image(uranusPic, 775, 300, uranusSize + 15, uranusSize + 15)
   image(neptunePic, 875, 300, neptuneSize + 20, neptuneSize + 20)
@@ -246,7 +266,6 @@ function draw() {
   ship.show();
 
   // rotate(ship.angle);
-  
 
   pop();
 
@@ -264,7 +283,6 @@ function draw() {
   }
 
   
-
   crab.update();
   crab.show();
   snail.update();
@@ -311,6 +329,17 @@ function draw() {
   translate(0 - translateSlider.value(), 0);
   image(mtns, 0, 0, 1000, 600)
 
+
+  bird.update()
+  bird.show()
+
+  for (let drop of rain) {
+    drop.show();
+    drop.update();
+}
+for (let sunflower of sunflowers) {
+  sunflower.show();
+}
 
   pop();
 
