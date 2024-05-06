@@ -47,20 +47,20 @@ class Bird {
 
             this.count++;
 
-            downwardGravity = createVector(0, 0.38);
-            for (let i = 0; i < rainAmt; i++) {
-                let x = this.pos.x;
-                let y = this.pos.y + 20;
-                rain.push(new Rain(x, y, i + 1));
+           
+            // for (let i = 0; i < rainAmt; i++) {
+            //     let x = this.pos.x;
+            //     let y = this.pos.y + 20;
+            //     rain.push(new Rain(x, y, i + 1));
     
-              }
+            //   }
     
-            for (let i = rain.length - 1; i >= 0; i--) {
-                rain[i].update();
-                if (rain[i].pos.y > height/1.5) {
-                    rain.splice(i, 1); // Remove raindrops if they go off-screen
-                }
-            }
+            // for (let i = rain.length - 1; i >= 0; i--) {
+            //     rain[i].update();
+            //     if (rain[i].pos.y > height/1.5) {
+            //         rain.splice(i, 1); // Remove raindrops if they go off-screen
+            //     }
+            // }
 
     }
 

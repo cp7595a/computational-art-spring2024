@@ -1,17 +1,16 @@
-class Rain {
-    constructor(x, y) {
+class Snow {
+    constructor(x, y, index) {
+        this.xog = x
+        this.yog = y
         this.pos = createVector(x, y);
-        this.vel = createVector(0, 3); // Initial velocity
-        this.acc = createVector(0, 0); // Initial acceleration
+        this.vel = createVector(0, 0);
+        this.acc = createVector(0, 0);
 
-        this.gravity = createVector(0, 0.1); // Define gravity
+        this.index = index;
 
-        this.radius = 5; // Adjust radius as needed
-    }
+        this.mass = this.index;
 
-    addForce(force) {
-        let forceWithMass = p5.Vector.div(force, this.mass);
-        this.acc.add(forceWithMass);
+        this.radius = sqrt(this.mass) * 0.5;
     }
 
     wrap() {
@@ -24,8 +23,24 @@ class Rain {
         }
     }
 
+    addForce(force) {
+        let forceWithMass = p5.Vector.div(force, this.mass);
+        this.acc.add(forceWithMass);
+    }
+
+    addWaterDrag() { //Air drag for snow as they get closer to the ground in this case
+        // fDrag = -C * mag(velocity)^2
+        let dragConstant = -0.3;
+        let forceDrag = this.vel.mag() * this.vel.mag() * dragConstant;
+        let drag = p5.Vector.normalize(this.vel);
+        drag.mult(forceDrag);
+        this.addForce(drag);
+    }
+
     update() {
         // FORCES
+        this.addForce(downwardGravity);
+        this.addForce(wind);
 
         // Apply water drag if the dot is overlapping with the water area.
         if (this.pos.y > height) {
@@ -43,10 +58,16 @@ class Rain {
         this.acc.mult(0); 
     }
 
-
     show() {
+        push();
+
         noStroke();
-        // fill(0, 0, 100); // Adjust color as needed
-        // ellipse(this.pos.x, this.pos.y, this.radius * 2, this.radius * 2); // Draw raindrop
+
+        translate(this.pos.x, this.pos.y);
+        fill(0, 0, 100 , 0.5);
+        ellipse(0, 0, this.radius);
+
+        pop();
+
     }
 }
