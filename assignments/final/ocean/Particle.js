@@ -1,10 +1,9 @@
 class Particle {
-    constructor(x, y, brightness, gravity) {
+    constructor(x, y, gravity, state) {
         this.pos = createVector(x, y);
         this.vel = createVector(random(-5, 5), random(-5, 5));
         this.acc = createVector(0, 0);
-
-        this.brightness = brightness;
+        this.state = state;
 
         this.gravity = gravity;
 
@@ -30,6 +29,7 @@ class Particle {
     }
 
     update() {
+
         this.lifetime--;
         if (this.lifetime < 0) {
             this.destroy = true;
@@ -38,10 +38,6 @@ class Particle {
         this.radius += 0.02;
 
         this.addForce(this.gravity);
-
-        if (this.pos.y > 400) {
-            this.addWaterDrag(); //slow towards surface
-        }
 
         this.vel.add(this.acc);
         this.vel.limit(1.95);
@@ -58,6 +54,8 @@ class Particle {
         translate(this.pos.x, this.pos.y);
         imageMode(CENTER);
         
+    
+
         fill(0, 0, 90, 0.05 - map(this.lifetime, 0, 100, .5, 0));
         rect(0, 0, this.radius * 2);
 

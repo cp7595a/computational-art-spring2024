@@ -1,18 +1,18 @@
 class ParticleSystem {
-    constructor(x, y, gravity) {
+    constructor(x, y, gravity, state) {
         this.pos = createVector(x, y);
         this.particles = [];
         this.bubbles = [];
 
         this.active = false;
 
+        this.state = state;
+
         this.gravity = gravity;
 
         this.bubbleStart = random (400, 425);
         this.radius = random(50, 100);
-        this.speed = random(-0.05, -1);
-
-        this.hue = random(360);
+        this.speed = random(-0.005, -0.5);
     }
 
     update() {
@@ -24,11 +24,7 @@ class ParticleSystem {
         }
 
         if (this.active && this.particles < 200) {
-            this.particles.push(new Particle(this.pos.x, this.pos.y, this.hue, this.gravity));
-        }
-
-        if (this.active && this.particles < 100) {
-            this.bubbles.push(new Particle(this.pos.x, this.pos.y, this.hue, this.gravity));
+            this.particles.push(new Particle(this.pos.x, this.pos.y, this.gravity, this.state));
         }
 
         for (let particle of this.particles) {

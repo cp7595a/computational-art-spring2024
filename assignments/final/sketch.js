@@ -1,18 +1,15 @@
-
-// 5+ interconnections between aspects of your system
-// 3+ types of media other than primitive drawing function:
-// images, audio/music, video, natural language processing/generation, web cams, or something else we haven’t covered such as 3D
-
 // IDEA:
 // The Sounds of the World!
 // Start river/park
 // Under the ocean 
 // Space
-let rain = [];
-let rainAmt = 15;
-let sunflowers = []; // Array to store sunflowers
 
-let blue;
+let sunflowers = []; // Array to store sunflowers
+let sunflowerAmt = 20;
+
+let blue; // put this here because of universal loading issues idk
+let salmon;
+let carp;
 
 let img;
 let imgWidth = 50;
@@ -20,6 +17,8 @@ let imgHeight = 50;
 
 let leftKeyPressed = false;
 let rightKeyPressed = false;
+
+// Plant stuff
 let mercuryState = false;
 let venusState = false;
 let earthState = false;
@@ -38,6 +37,7 @@ let saturnSize = 0;
 let uranusSize = 0;
 let neptuneSize = 0;
 
+// Flow field stuff
 let translatedFlowField = [];
 let systems = [];
 let flowField = [];
@@ -45,6 +45,7 @@ let fishes = [];
 
 let health = 50; 
 
+// Fish stuff
 let numFishes = 20;
 let numSystems = 10; 
 let numCellsWidth = 20;
@@ -59,10 +60,10 @@ let gravitationalConstant = 0.00001;
 let downwardGravity;
 let wind;
 
-
 let p3;
 let p2;
 
+// music stuff
 let eighth = 2;
 let major = [0,2,4,5,7,9,11,12];
 let base = 48; 
@@ -72,8 +73,6 @@ let cellWidth;
 let cellHeight;
 let gravity;
 let translateSlider;
-
-let waterPlay = false;
 
 function preload() {
   // load sounds
@@ -86,6 +85,7 @@ function preload() {
   uranus = loadSound("./samples/NoteG2Uranus.mp3");
   neptune = loadSound("./samples/NoteB2Neptune.mp3");
   water = loadSound("./samples/water.mp3");
+  chirp = loadSound("./samples/birdschirp.mp3");
 
   // load pics
   space = loadImage("./pics/space.jpg");
@@ -116,6 +116,8 @@ function preload() {
   bird1 = loadImage("./pics/bird1.png");
   bird2 = loadImage("./pics/bird2.png");
   sunflower = loadImage("./pics/Sunflower.png");
+  cabin = loadImage("./pics/cabin.png");
+  sun = loadImage("./pics/sun.png");
 }
 
 
@@ -125,10 +127,12 @@ function setup() {
   colorMode(HSB);
   noStroke();
 
+  // Create slider
   translateSlider = createSlider(0, 2000, 0, 1000); 
   translateSlider.position(10, height + 20);
 
 
+  // Flow fields
   cellWidth = width / numCellsWidth;
   cellHeight = 450 / numCellsHeight;
 
@@ -146,6 +150,7 @@ function setup() {
     xoff += inc;
   }
 
+  // Another one for space for stars
   for (let xIndex = 0; xIndex < numCellsWidth; xIndex++) {
     translatedFlowField[xIndex] = [];
     yoff = 0;
@@ -157,24 +162,29 @@ function setup() {
     xoff += inc;
   }
 
-  bird = new Bird(100, 300);
 
-  for (let i = 0; i < 10; i++) { // Adjust the number of sunflowers as needed
-    let x = random(width); // Generate random x position
-    let y = random(height/1.5, height - 50); // Generate random y position
-    sunflowers.push(new Sunflower(x, y, bird.pos.x)); // Create and store a new sunflower
-}
-
+  // create camera
   img = createCapture(VIDEO);
   img.size(imgWidth, imgHeight);
   img.hide();
  
+  // create animals and characteres with class
+  bird = new Bird(800, 300);
   ship = new Ship(random(200, 700),random(200, 700))
   p2 = new Person(0, 500);
   p3 = new Astronaut(width/2, height/2);
   crab = new Crab(random(200, 700), 500)
   snail = new Snail(random(200, 700), 500)
 
+
+  // create sunflowers 
+  for (let i = 0; i < sunflowerAmt; i++) {
+    let x = random(width - 150);
+    let y = random(height/1.5, height - 100);
+    sunflowers.push(new Sunflower(x, y));
+  }
+
+  // crearte fish
   target = crab.pos
 
   for(let i = 0; i < numFishes; i++) {
@@ -182,13 +192,14 @@ function setup() {
     fishes.push(new Fish(random(width), random(height), target, type));
   }
 
-
+  // create bubbles
   gravity  = createVector(0, -0.1)
   for (let i = 0; i < numSystems; i++) {
     translate(1000 - translateSlider.value(), 0);
-    systems.push(new ParticleSystem(random(100, width-200), 600, gravity));
+    systems.push(new ParticleSystem(random(100, width-200), 600, gravity, "bubble"));
   }
 
+  // initialize synth and music loop
   synth = new p5.PolySynth();
   loop = new p5.SoundLoop(soundLoop, loopInterval/2);
 
@@ -197,7 +208,7 @@ function setup() {
 function draw() {
   background(0, 0, 100);
 
-  // SPACE SCENE
+  // SPACE SCENE AND ALL OF ITS STUFF //
   push();
   translate(2000 - translateSlider.value(), 0);
   image(space, 0, 0, 1200, 600);
@@ -266,16 +277,16 @@ function draw() {
   ship.update();
   ship.show();
 
-  // rotate(ship.angle);
-
   pop();
 
-  // OCEAN SCENE
+
+
+
+  // OCEAN SCENE AND ALL ITS STUFF//
   push();
   translate(1000 - translateSlider.value(), 0);
 
   image(ocean, 0, 0, 1000, 600)
-  //Little shiny glimmers
   for (let xIndex = 0; xIndex < numCellsWidth; xIndex++) {
     for (let yIndex = 0; yIndex < numCellsHeight; yIndex++) {
       flowField[xIndex][yIndex].update();
@@ -310,7 +321,7 @@ function draw() {
 
   if (health < 0){
     image(dead_crab, p2.pos.x - 5, p2.pos.y - 20, 65, 40);
-}
+  }
   
   if (leftKeyPressed) {
     p2.vel.x = -1;
@@ -323,29 +334,30 @@ function draw() {
   for (let ps of systems) {
     ps.update();
   }
-  
+
   pop();
 
+
+  // MOUNTAIN SCENE AND ALL ITS STUFF//
   push();
   translate(0 - translateSlider.value(), 0);
   image(mtns, 0, 0, 1000, 600)
 
-
   bird.update()
   bird.show()
 
-  for (let drop of rain) {
-    drop.show();
-    drop.update();
-}
+  image(sun, 450, 335 + frameCount * -0.05, 50, 50);
+
+  image(cabin, 900, 400, 80, 110);
+
 for (let sunflower of sunflowers) {
   sunflower.show();
 }
-
   pop();
 
 }
 
+// CELL STUFF
 function positionToFlowFieldIndex(x, y) {
   translate(1000 - translateSlider.value(), 0);
   let xIndex = floor(map(x, 0, width, 0, numCellsWidth));
@@ -355,6 +367,8 @@ function positionToFlowFieldIndex(x, y) {
   return createVector(xIndex, yIndex);
 }
 
+
+// SOUND LOOP STUFF
 function soundLoop(timeFromNow) {
   push();
 
@@ -366,6 +380,7 @@ function soundLoop(timeFromNow) {
     }
   }
 
+  // condensing code to make it easier for you to read :)
   const planets = [mercury, venus, earth, mars, jupiter, saturn, uranus, neptune];
   const states = [mercuryState, venusState, earthState, marsState, jupiterState, saturnState, uranusState, neptuneState];
   
@@ -377,22 +392,33 @@ function soundLoop(timeFromNow) {
     }
   }
 
+// make sure they all stop regardless
 if(translateSlider.value() != 2000){
   mercury.stop()
+  mercuryState = false;
   venus.stop()
+  venusState = false;
   mars.stop()
+  marsState = false;
   earth.stop()
+  earthState = false;
   jupiter.stop()
+  jupiterState = false;
   saturn.stop()
+  saturnState = false;
   neptune.stop()
+  neptuneState = false;
   uranus.stop()
+  uranusState = false;
 
 }
 
-if(translateSlider.value() < 750){
+// CHANGING T BASED ON TRANSLATE SO THAT EACH SCENE SOUNDS DIFF
+
+if(translateSlider.value() == 0){
   t = 1
   water.stop();
-  } else if(translateSlider.value() > 751 && translateSlider.value() < 1750){
+  } else if(translateSlider.value() == 1000){
     t = 2
     water.play();
   }else if(translateSlider.value() == 2000){
@@ -438,7 +464,6 @@ function mousePressed() {
         mercuryState = true;
       }
   }
-
   if (mouseX >= 150 && mouseX <= 150 + venusSize + 20 && mouseY >= 300 && mouseY <= 300 + venusSize + 20) {
       if (venus.isPlaying()) {
         venusState = false;
@@ -446,7 +471,6 @@ function mousePressed() {
         venusState = true;
       }
   }
-
   if (mouseX >= 250 && mouseX <= 250 + earthSize + 20 && mouseY >= 300 && mouseY <= 300 + earthSize + 20) {
       if (earth.isPlaying()) {
         earthState = false;
@@ -454,7 +478,6 @@ function mousePressed() {
         earthState = true;
       }
   }
-
   if (mouseX >= 360 && mouseX <= 360 + marsSize + 15 && mouseY >= 300 && mouseY <= 300 + marsSize + 15) {
       if (mars.isPlaying()) {
         marsState = false;
@@ -462,7 +485,6 @@ function mousePressed() {
         marsState = true;
       }
   }
-
   if (mouseX >= 500 && mouseX <= 500 + jupiterSize + 55 && mouseY >= 300 && mouseY <= 300 + jupiterSize + 50) {
       if (jupiter.isPlaying()) {
         jupiterState = false;
@@ -470,14 +492,13 @@ function mousePressed() {
         jupiterState = true;
       }
   }
-
   if (mouseX >= 650 && mouseX <= 650 + saturnSize + 50 && mouseY >= 300 && mouseY <= 300 + saturnSize + 25) {
       if (saturn.isPlaying()) {
         saturnState = false;
       } else {
         saturnState = true;
       }
-    }
+  }
   if (mouseX >= 775 && mouseX <= 775 + uranusSize + 15 && mouseY >= 300 && mouseY <= 300 + uranusSize + 15) {
       if (uranus.isPlaying()) {
         uranusState = false;
@@ -485,13 +506,20 @@ function mousePressed() {
         uranusState = true;
       }
   }
-
   if (mouseX >= 875 && mouseX <= 875 + neptuneSize + 20 && mouseY >= 300 && mouseY <= 300 + neptuneSize + 20) {
       if (neptune.isPlaying()) {
         neptuneState = false;
       } else {
         neptuneState = true;
       }
+  }
+
+  // BIRD CLICK PLAY //
+  if (mouseX >= bird.pos.x && mouseX <= bird.pos.x + 50 &&
+    mouseY >= bird.pos.y && mouseY <= bird.pos.y + 50) {
+    chirp.play();
+  }else{
+    chirp.stop();
   }
 }
 

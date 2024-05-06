@@ -83,9 +83,9 @@ class Bird {
 }
 
     if (this.showingBird2) {
-        image(bird1, 0, -10, 50, 45);
+        image(bird1, 0, -10, 35, 30);
     } else {
-        image(bird2, 0, -10, 55, 55);
+        image(bird2, 0, -10, 35, 35);
     }
 
         pop();
