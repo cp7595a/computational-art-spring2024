@@ -343,13 +343,12 @@ function draw() {
   translate(0 - translateSlider.value(), 0);
   image(mtns, 0, 0, 1000, 600)
 
-  bird.update()
-  bird.show()
-
   image(sun, 450, 335 + frameCount * -0.05, 50, 50);
 
   image(cabin, 900, 400, 80, 110);
 
+  bird.update()
+  bird.show()
 for (let sunflower of sunflowers) {
   sunflower.show();
 }
